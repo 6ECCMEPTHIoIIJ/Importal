@@ -41,6 +41,7 @@
     <ClCompile Include="Sources\Input.cpp" />
     <ClCompile Include="Sources\Main.cpp" />
     <ClCompile Include="Sources\Application.cpp" />
+    <ClCompile Include="Sources\Shader.cpp" />
     <ClCompile Include="Sources\ShaderReader.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -67,6 +68,7 @@
   <ItemGroup>
     <ClInclude Include="Includes\Application.h" />
     <ClInclude Include="Includes\Input.h" />
+    <ClInclude Include="Includes\Shader.h" />
     <ClInclude Include="Includes\ShaderReader.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -145,7 +147,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>.\Includes;..\Dependencies\Glfw338\Include;..\Dependencies\Glew220\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Dependencies\Stb\Includes;.\Includes;..\Dependencies\Glfw338\Include;..\Dependencies\Glew220\Include;..\Dependencies\Glm0998\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -164,7 +166,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>.\Includes;..\Dependencies\Glfw338\Include;..\Dependencies\Glew220\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Dependencies\Stb\Includes;.\Includes;..\Dependencies\Glfw338\Include;..\Dependencies\Glew220\Include;..\Dependencies\Glm0998\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -183,7 +185,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>.\Includes;..\Dependencies\Glfw338\Include;..\Dependencies\Glew220\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Dependencies\Stb\Includes;.\Includes;..\Dependencies\Glfw338\Include;..\Dependencies\Glew220\Include;..\Dependencies\Glm0998\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -202,7 +204,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>.\Includes;..\Dependencies\Glfw338\Include;..\Dependencies\Glew220\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Dependencies\Stb\Includes;.\Includes;..\Dependencies\Glfw338\Include;..\Dependencies\Glew220\Include;..\Dependencies\Glm0998\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
