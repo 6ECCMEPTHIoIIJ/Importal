@@ -2,8 +2,13 @@
 
 #include <iostream>
 
+#include <GLM/glm.hpp>
+#include <GLM/gtc/matrix_transform.hpp>
+#include <GLM/gtc/type_ptr.hpp>
+
 #include "Shader.h"
 #include "Input.h"
+
 
 namespace Importal
 {
@@ -24,8 +29,12 @@ namespace Importal
     glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
 
     // Create a GLFWwindow object that we can use for GLFW's functions
-    GLFWwindow* window = glfwCreateWindow(700, 300, "Importal", nullptr, nullptr);
+    GLFWwindow* window = glfwCreateWindow(300, 300, "Importal", nullptr, nullptr);
     glfwMakeContextCurrent(window);
+    glEnable(GL_DEPTH_TEST);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glDepthMask(GL_FALSE);
+    glDepthFunc(GL_LESS);
 
     // Set the required callback functions
     glfwSetFramebufferSizeCallback(window, OnResize);
@@ -44,13 +53,28 @@ namespace Importal
 
     // Set up vertex data (and buffer(s)) and attribute pointers
     GLfloat vertices[] = {
-        0.5f, -0.5f, 1.0f,  1.0f, 0.0f, 0.0f,   // Нижний правый угол
-        -0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,   // Нижний левый угол
-        0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f    // Верхний угол
+        0.5f, -0.5f, 0.5f,  1.0f, 0.0f, 0.0f,   // Нижний правый угол
+        -0.5f, -0.5f, 0.5f,  1.0f, 1.0f, 0.0f,   // Нижний левый угол
+        -0.5f,  0.5f, 0.5f,  0.0f, 1.0f, 0.0f,    // Верхний угол
+        0.5f,  0.5f, 0.5f,  0.0f, 0.0f, 1.0f    // Верхний угол
     };
 
     GLuint indices[] = {  // Note that we start from 0!
-        0, 1, 2,  // First Triangle
+        0, 1, 3,  // First Triangle
+        1, 3, 2
+    };
+
+    glm::vec3 cubePositions[] = {
+    glm::vec3(0.0f,  0.0f,  0.0f),
+    glm::vec3(2.0f,  5.0f, -15.0f),
+    glm::vec3(-1.5f, -2.2f, -2.5f),
+    glm::vec3(-3.8f, -2.0f, -12.3f),
+    glm::vec3(2.4f, -0.4f, -3.5f),
+    glm::vec3(-1.7f,  3.0f, -7.5f),
+    glm::vec3(1.3f, -2.0f, -2.5f),
+    glm::vec3(1.5f,  2.0f, -2.5f),
+    glm::vec3(1.5f,  0.2f, -1.5f),
+    glm::vec3(-1.3f,  1.0f, -1.5f)
     };
 
     Shader ourShader("Shaders\\VertexShader.glsl", "Shaders\\FragmentShader.glsl");
@@ -59,6 +83,7 @@ namespace Importal
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
     glGenBuffers(1, &EBO);
+
     // Bind the Vertex Array Object first, then bind and set vertex buffer(s) and attribute pointer(s).
     glBindVertexArray(VAO);
 
@@ -69,10 +94,11 @@ namespace Importal
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
    // Атрибут с координатами
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)0);
+    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)0);
     glEnableVertexAttribArray(0);
+
     // Атрибут с цветом
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
     glEnableVertexAttribArray(1);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0); // Note that this is allowed, the call to glVertexAttribPointer registered VBO as the currently bound vertex buffer object so afterwards we can safely unbind
@@ -90,7 +116,20 @@ namespace Importal
       glClear(GL_COLOR_BUFFER_BIT);
 
       // Draw our first triangle
+      glm::mat4 trans = glm::mat4(1.0f);
+      glm::mat4 proj = glm::perspective(glm::radians(45.0f), (float)width / (float)height, 0.1f, 100.0f);
+      glfwGetWindowSize(window, &width, &height);
+      //glfwGetVideoMode(glfwGetCu);
+      trans = glm::scale(trans, glm::vec3((float)height / width, 1.0f, 1.0f));
+      trans = glm::rotate(trans, (float)glfwGetTime() * 5.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+      glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -3.0f));
+
       ourShader.Use();
+      ourShader.setMat4("projection", proj);
+      ourShader.setMat4("transform", trans);
+      ourShader.setMat4("view", view);
+      //GLuint transformLoc = glGetUniformLocation(ourShader.Program, "transform");
+      //glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
 
       //GLfloat timeValue = glfwGetTime();
       //GLfloat greenValue = (sin(timeValue) / 2) + 0.5;
