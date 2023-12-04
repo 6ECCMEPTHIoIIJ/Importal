@@ -32,9 +32,7 @@ namespace Importal
     GLFWwindow* window = glfwCreateWindow(300, 300, "Importal", nullptr, nullptr);
     glfwMakeContextCurrent(window);
     glEnable(GL_DEPTH_TEST);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glDepthMask(GL_FALSE);
-    glDepthFunc(GL_LESS);
+
 
     // Set the required callback functions
     glfwSetFramebufferSizeCallback(window, OnResize);
@@ -113,21 +111,11 @@ namespace Importal
       // Render
       // Clear the colorbuffer
       glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-      glClear(GL_COLOR_BUFFER_BIT);
+      glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 
       // Draw our first triangle
-      glm::mat4 trans = glm::mat4(1.0f);
-      glm::mat4 proj = glm::perspective(glm::radians(45.0f), (float)width / (float)height, 0.1f, 100.0f);
-      glfwGetWindowSize(window, &width, &height);
-      //glfwGetVideoMode(glfwGetCu);
-      trans = glm::scale(trans, glm::vec3((float)height / width, 1.0f, 1.0f));
-      trans = glm::rotate(trans, (float)glfwGetTime() * 5.0f, glm::vec3(0.0f, 1.0f, 0.0f));
-      glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -3.0f));
 
-      ourShader.Use();
-      ourShader.setMat4("projection", proj);
-      ourShader.setMat4("transform", trans);
-      ourShader.setMat4("view", view);
       //GLuint transformLoc = glGetUniformLocation(ourShader.Program, "transform");
       //glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
 
@@ -138,6 +126,20 @@ namespace Importal
       ////glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
 
       glBindVertexArray(VAO);
+      glm::mat4 trans = glm::mat4(1.0f);
+      glm::mat4 proj = glm::perspective(glm::radians(90.0f), (float)width / (float)height, 0.1f, 100.0f);
+      glfwGetWindowSize(window, &width, &height);
+      trans = glm::scale(trans, glm::vec3((float)height / width, 1.0f, 1.0f));
+      trans = glm::rotate(trans, (float)glfwGetTime() * 5.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+      trans = glm::rotate(trans, (float)glfwGetTime() * 4.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+      trans = glm::rotate(trans, (float)glfwGetTime() * -3.0f, glm::vec3(0.0f, 0.0f, 1.0f));
+      glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -3.0f));
+
+      ourShader.setMat4("projection", proj);
+      ourShader.setMat4("transform", trans);
+      ourShader.setMat4("view", view);
+      ourShader.Use();
+
       glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
       glBindVertexArray(0);
 
