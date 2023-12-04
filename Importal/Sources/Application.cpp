@@ -9,7 +9,7 @@ namespace Importal
 {
   Application::Application()
   {
-
+        
   }
 
   void OnResize(GLFWwindow* window, int width, int height);
