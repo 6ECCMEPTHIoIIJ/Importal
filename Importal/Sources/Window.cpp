@@ -40,6 +40,6 @@ namespace Importal
   Window::~Window()
   {
     if (_handler != nullptr);
-      glfwDestroyWindow(_handler);
+    glfwDestroyWindow(_handler);
   }
 }
