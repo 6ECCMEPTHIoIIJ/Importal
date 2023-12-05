@@ -147,7 +147,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>..\Dependencies\Stb\Includes;.\Includes;..\Dependencies\Glfw338\Include;..\Dependencies\Glew220\Include;..\Dependencies\Glm0998\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\Includes;..\Dependencies\Glfw338\Include;..\Dependencies\Glew220\Include;..\Dependencies\Glm0998\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
