@@ -3,9 +3,10 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
-
 #include <unordered_map>
+
 #include "Window.h"
+
 
 namespace Importal
 {
@@ -44,7 +45,10 @@ namespace Importal
       glfwMakeContextCurrent(_window->GetHandler());
       glfwSetFramebufferSizeCallback(_window->GetHandler(), HandleWindowResize);
       glfwSetKeyCallback(_window->GetHandler(), HandleKeyInput);
-      _window->GetInput()->BindActionOnPress(GLFW_KEY_ESCAPE, [window = _window]() { glfwSetWindowShouldClose(window->GetHandler(), GL_TRUE); });
+      _window->GetInput()->BindActionOnPress(GLFW_KEY_ESCAPE, [window = _window]()
+      {
+        glfwSetWindowShouldClose(window->GetHandler(), GL_TRUE);
+      });
 
       glewExperimental = GL_TRUE;
       glewInit();
