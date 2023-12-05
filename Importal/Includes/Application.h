@@ -23,6 +23,7 @@ namespace Importal
     ~Application();
 
   private:
+    glm::vec3 _camPos = glm::vec3(0.0f, 0.0f, 0.0f);
     void CreateWindow();
     void DeleteWindow();
     GLboolean CheckWindowCreationStatus();

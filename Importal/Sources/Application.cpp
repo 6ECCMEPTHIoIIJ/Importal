@@ -45,9 +45,28 @@ namespace Importal
     glfwMakeContextCurrent(_window->GetHandler());
     glfwSetFramebufferSizeCallback(_window->GetHandler(), HandleWindowResize);
     glfwSetKeyCallback(_window->GetHandler(), HandleKeyInput);
+    glfwSetInputMode(_window->GetHandler(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
     _window->GetInput()->BindActionOnPress(GLFW_KEY_ESCAPE, [window = _window]()
     {
       glfwSetWindowShouldClose(window->GetHandler(), GL_TRUE);
+    });
+
+    _window->GetInput()->BindActionOnRepeate(GLFW_KEY_W, [pos = &_camPos]()
+    {
+      pos->z -= 0.5f;
+    });
+    _window->GetInput()->BindActionOnRepeate(GLFW_KEY_S, [pos = &_camPos]()
+    {
+      pos->z += 0.5f;
+    });
+    _window->GetInput()->BindActionOnRepeate(GLFW_KEY_A, [pos = &_camPos]()
+    {
+      pos->x -= 0.5f;
+    });
+    _window->GetInput()->BindActionOnRepeate(GLFW_KEY_D, [pos = &_camPos]()
+    {
+      pos->x += 0.5f;
     });
 
     glewExperimental = GL_TRUE;
@@ -75,6 +94,15 @@ namespace Importal
       0.0f, 1.0f, 0.0f,
       1.0f, 0.0f, 0.0f,
       1.0f, 1.0f, 0.0f,
+
+      0.0f, 0.0f, 0.0f,
+      1.0f, 1.0f, 1.0f,
+      0.5f, 1.0f, 1.0f,
+      0.5f, 0.5f, 1.0f,
+      0.5f, 1.0f, 1.0f,
+      0.5f, 1.0f, 0.5f,
+      1.0f, 0.5f, 0.5f,
+      1.0f, 1.0f, 0.0f,
     };
 
     GLuint indices[] = {
@@ -99,7 +127,21 @@ namespace Importal
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
     glEnableVertexAttribArray(0);
 
-    VertexBuffer cb(colours, sizeof(colours), GL_STATIC_DRAW);
+    VertexBuffer cb(colours, sizeof(colours) / 2, GL_STATIC_DRAW);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+    glEnableVertexAttribArray(1);
+
+    VertexBuffer::Unbind();
+    ArrayBuffer::Unbind();
+
+    ArrayBuffer ab1;
+    ab1.Bind();
+    IndexBuffer ib1(indices, sizeof(indices) / sizeof(*indices), GL_STATIC_DRAW);
+    VertexBuffer vb1(vertices, sizeof(vertices), GL_STATIC_DRAW);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+    glEnableVertexAttribArray(0);
+
+    VertexBuffer cb1(colours + sizeof(colours) / sizeof(*colours) / 2, sizeof(colours) / 2, GL_STATIC_DRAW);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
     glEnableVertexAttribArray(1);
 
@@ -118,11 +160,13 @@ namespace Importal
 
       glm::mat4 trans = glm::mat4(1.0f);
       glm::mat4 proj = glm::perspective(glm::radians(90.0f), (float)_window->GetWidth() / (float)_window->GetHeight(), 0.1f, 100.0f);
-      trans = glm::translate(trans, glm::vec3(glm::cos((float)glfwGetTime() * 2.0f), glm::sin((float)glfwGetTime() * 2.0f), 0.0f));
-      trans = glm::rotate(trans, (float)glfwGetTime() * 1.0f, glm::vec3(0.0f, 1.0f, 0.0f));
-      trans = glm::rotate(trans, (float)glfwGetTime() * 1.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-      trans = glm::rotate(trans, (float)glfwGetTime() * -1.0f, glm::vec3(0.0f, 0.0f, 1.0f));
-      glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -3.0f));
+      //trans = glm::translate(trans, glm::vec3(glm::cos((float)glfwGetTime() * 2.5231f), glm::sin((float)glfwGetTime() * 3.213f), glm::sin((float)glfwGetTime() * 5.463f)));
+      //trans = glm::rotate(trans, (float)glfwGetTime() * 1.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+      //trans = glm::rotate(trans, (float)glfwGetTime() * 1.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+      //trans = glm::rotate(trans, (float)glfwGetTime() * -1.0f, glm::vec3(0.0f, 0.0f, 1.0f));
+      glm::mat4 view = glm::lookAt(_camPos,
+        glm::vec3(_camPos - glm::vec3(0.0f, 0.0f, 1.0f)),
+        glm::vec3(0.0f, 1.0f, 0.0f));
 
 
       Shader::SetMat4(0, trans);
@@ -135,7 +179,22 @@ namespace Importal
       glDrawElements(GL_TRIANGLES, ib.GetCount(), GL_UNSIGNED_INT, nullptr);
       ArrayBuffer::Unbind();
 
+      trans = glm::mat4(1.0f);
+      /*trans = glm::rotate(trans, (float)glfwGetTime() * -1.0f, glm::vec3(0.0f, 0.0f, 1.0f));
+      trans = glm::rotate(trans, (float)glfwGetTime() * 1.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+      trans = glm::rotate(trans, (float)glfwGetTime() * 1.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+      trans = glm::translate(trans, glm::vec3(glm::cos((float)glfwGetTime() * -2.2346f), glm::sin((float)glfwGetTime() * -3.4f), glm::sin((float)glfwGetTime() * -5.643f)));*/
 
+
+      Shader::SetMat4(0, trans);
+      Shader::SetMat4(1, view);
+      Shader::SetMat4(2, proj);
+
+      shader.Use();
+
+      ab1.Bind();
+      glDrawElements(GL_TRIANGLES, ib1.GetCount(), GL_UNSIGNED_INT, nullptr);
+      ArrayBuffer::Unbind();
 
       glfwSwapBuffers(_window->GetHandler());
     }
