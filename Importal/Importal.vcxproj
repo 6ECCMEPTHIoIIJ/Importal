@@ -19,6 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Sources\ArrayBuffer.cpp" />
+    <ClCompile Include="Sources\IndexBuffer.cpp" />
+    <ClCompile Include="Sources\VertexBuffer.cpp" />
     <ClCompile Include="Sources\Window.cpp" />
     <CopyFileToFolders Include="Shaders\VertexShader.glsl">
       <FileType>Document</FileType>
@@ -67,8 +70,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Includes\Application.h" />
+    <ClInclude Include="Includes\ArrayBuffer.h" />
+    <ClInclude Include="Includes\IndexBuffer.h" />
     <ClInclude Include="Includes\Input.h" />
     <ClInclude Include="Includes\Shader.h" />
+    <ClInclude Include="Includes\VertexBuffer.h" />
     <ClInclude Include="Includes\Window.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

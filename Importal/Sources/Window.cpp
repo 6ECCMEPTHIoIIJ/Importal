@@ -7,7 +7,7 @@ namespace Importal
   {
     _width = width;
     _height = height;
-    _handler = glfwCreateWindow(width, width, title.c_str(), glfwGetPrimaryMonitor(), nullptr);
+    _handler = glfwCreateWindow(width, width, title.c_str(), nullptr, nullptr);
   }
 
   void Window::OnResize(int width, int height)

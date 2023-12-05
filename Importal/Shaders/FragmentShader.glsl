@@ -1,8 +1,8 @@
 #version 460 core
 
-in vec3 ourColor;
+layout (location = 0) in vec3 ourColor;
 
-out vec4 color;
+layout (location = 0) out vec4 color;
 
 void main()
 {

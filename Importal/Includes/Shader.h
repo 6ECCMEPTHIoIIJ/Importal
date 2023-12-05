@@ -55,6 +55,19 @@ namespace Importal
     void SetMat4(const std::string& name, const glm::mat4& mat) const;
     ~Shader();
 
+    static void SetBool(unsigned int layout, bool value);
+    static void SetInt(unsigned int layout, int value);
+    static void SetFloat(unsigned int layout, float value);
+    static void SetVec2(unsigned int layout, const glm::vec2& value);
+    static void SetVec2(unsigned int layout, float x, float y);
+    static void SetVec3(unsigned int layout, const glm::vec3& value);
+    static void SetVec3(unsigned int layout, float x, float y, float z);
+    static void SetVec4(unsigned int layout, const glm::vec4& value);
+    static void SetVec4(unsigned int layout, float x, float y, float z, float w);
+    static void SetMat2(unsigned int layout, const glm::mat2& mat);
+    static void SetMat3(unsigned int layout, const glm::mat3& mat);
+    static void SetMat4(unsigned int layout, const glm::mat4& mat);
+
   private:
     GLuint _program;
   };
