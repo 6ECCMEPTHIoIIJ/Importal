@@ -2,9 +2,9 @@
 
 int main()
 {
-  auto win = new Importal::Application();
-  win->Run();
-  delete win;
+  auto app = new Importal::Application();
+  app->Run();
+  delete app;
 
   return 0;
 }
