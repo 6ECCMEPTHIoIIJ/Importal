@@ -10,6 +10,7 @@
 #include "IndexBuffer.h"
 #include "ArrayBuffer.h"
 #include "Shader.h"
+#include "Timer.h"
 
 namespace Importal
 {
@@ -23,19 +24,23 @@ namespace Importal
     ~Application();
 
   private:
-    glm::vec3 _camPos = glm::vec3(0.0f, 0.0f, 0.0f);
     void CreateWindow();
     void DeleteWindow();
     GLboolean CheckWindowCreationStatus();
     void LogWindowCreationError();
     void RegisterWindow();
-    void ProcessInputActions() {
-      _window->GetInput();
+    void ProcessInputActions();
 
-    }
     static void HandleWindowResize(GLFWwindow* handler, GLint width, GLint height);
     static void HandleKeyInput(GLFWwindow* handler, int key, int scancode, int action, int mods);
 
+    glm::vec3 _camMoveDir = glm::vec3(0.0f, 0.0f, 0.0f);
+    bool moveF = false;
+    bool moveB = false;
+    bool moveR = false;
+    bool moveL = false;
+    glm::vec3 _camPos = glm::vec3(0.0f, 0.0f, 3.0f);
+    Timer _time;
     Window* _window = nullptr;
     static std::unordered_map<const GLFWwindow*, Window*> _windows;
   };

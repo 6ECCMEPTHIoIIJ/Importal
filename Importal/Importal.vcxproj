@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="Sources\ArrayBuffer.cpp" />
     <ClCompile Include="Sources\IndexBuffer.cpp" />
+    <ClCompile Include="Sources\Timer.cpp" />
     <ClCompile Include="Sources\VertexBuffer.cpp" />
     <ClCompile Include="Sources\Window.cpp" />
     <CopyFileToFolders Include="Shaders\VertexShader.glsl">
@@ -74,6 +75,7 @@
     <ClInclude Include="Includes\IndexBuffer.h" />
     <ClInclude Include="Includes\Input.h" />
     <ClInclude Include="Includes\Shader.h" />
+    <ClInclude Include="Includes\Timer.h" />
     <ClInclude Include="Includes\VertexBuffer.h" />
     <ClInclude Include="Includes\Window.h" />
   </ItemGroup>

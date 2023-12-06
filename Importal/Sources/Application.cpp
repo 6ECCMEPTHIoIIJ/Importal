@@ -47,31 +47,27 @@ namespace Importal
     glfwSetKeyCallback(_window->GetHandler(), HandleKeyInput);
     glfwSetInputMode(_window->GetHandler(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-    _window->GetInput()->BindKeyAction(GLFW_KEY_ESCAPE, [window = _window](ActionState actionState)
+    _window->GetInput()->BindKeyAction(GLFW_KEY_ESCAPE, [this](ActionState actionState)
     {
       if (actionState.Started)
-        glfwSetWindowShouldClose(window->GetHandler(), GL_TRUE);
+        glfwSetWindowShouldClose(_window->GetHandler(), GL_TRUE);
     });
 
-    _window->GetInput()->BindKeyAction(GLFW_KEY_W, [pos = &_camPos](ActionState actionState)
+    _window->GetInput()->BindKeyAction(GLFW_KEY_W, [this](ActionState actionState)
     {
-      if (actionState.Performed)
-        pos->z -= 0.25f;
+      moveF = actionState.Performed;
     });
-    _window->GetInput()->BindKeyAction(GLFW_KEY_S, [pos = &_camPos](ActionState actionState)
+    _window->GetInput()->BindKeyAction(GLFW_KEY_S, [this](ActionState actionState)
     {
-      if (actionState.Performed)
-        pos->z += 0.25f;
+      moveB = actionState.Performed;
     });
-    _window->GetInput()->BindKeyAction(GLFW_KEY_A, [pos = &_camPos](ActionState actionState)
+    _window->GetInput()->BindKeyAction(GLFW_KEY_A, [this](ActionState actionState)
     {
-      if (actionState.Performed)
-        pos->x -= 0.25f;
+      moveL = actionState.Performed;
     });
-    _window->GetInput()->BindKeyAction(GLFW_KEY_D, [pos = &_camPos](ActionState actionState)
+    _window->GetInput()->BindKeyAction(GLFW_KEY_D, [this](ActionState actionState)
     {
-      if (actionState.Performed)
-        pos->x += 0.25f;
+      moveR = actionState.Performed;
     });
 
     glewExperimental = GL_TRUE;
@@ -155,11 +151,21 @@ namespace Importal
 
 
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_FRONT);
     while (!glfwWindowShouldClose(_window->GetHandler()))
     {
       glfwPollEvents();
 
+      _time.Update();
       _window->GetInput()->ProcessKeyActions();
+      int moveZ = moveB - moveF;
+      int moveX = moveR - moveL;
+
+      _camMoveDir = moveX != 0 || moveZ != 0
+        ? glm::normalize(glm::vec3(moveX, 0.0f, moveZ))
+        : glm::vec3(0.0f, 0.0f, 0.0f);
+      _camPos += _camMoveDir * _time.GetDeltaTime();
 
       glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -240,6 +246,10 @@ namespace Importal
   void Application::RegisterWindow()
   {
     _windows[_window->GetHandler()] = _window;
+  }
+
+  void Application::ProcessInputActions() {
+    _window->GetInput();
   }
 
   void Application::HandleWindowResize(GLFWwindow* handler, GLint width, GLint height)

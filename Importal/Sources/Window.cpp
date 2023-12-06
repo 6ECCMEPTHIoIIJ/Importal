@@ -39,7 +39,7 @@ namespace Importal
 
   Window::~Window()
   {
-    if (_handler != nullptr);
-    glfwDestroyWindow(_handler);
+    if (_handler != nullptr)
+      glfwDestroyWindow(_handler);
   }
 }
