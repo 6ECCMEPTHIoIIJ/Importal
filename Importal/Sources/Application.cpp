@@ -47,26 +47,31 @@ namespace Importal
     glfwSetKeyCallback(_window->GetHandler(), HandleKeyInput);
     glfwSetInputMode(_window->GetHandler(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-    _window->GetInput()->BindActionOnPress(GLFW_KEY_ESCAPE, [window = _window]()
+    _window->GetInput()->BindKeyAction(GLFW_KEY_ESCAPE, [window = _window](ActionState actionState)
     {
-      glfwSetWindowShouldClose(window->GetHandler(), GL_TRUE);
+      if (actionState.Started)
+        glfwSetWindowShouldClose(window->GetHandler(), GL_TRUE);
     });
 
-    _window->GetInput()->BindActionOnRepeate(GLFW_KEY_W, [pos = &_camPos]()
+    _window->GetInput()->BindKeyAction(GLFW_KEY_W, [pos = &_camPos](ActionState actionState)
     {
-      pos->z -= 0.5f;
+      if (actionState.Performed)
+        pos->z -= 0.25f;
     });
-    _window->GetInput()->BindActionOnRepeate(GLFW_KEY_S, [pos = &_camPos]()
+    _window->GetInput()->BindKeyAction(GLFW_KEY_S, [pos = &_camPos](ActionState actionState)
     {
-      pos->z += 0.5f;
+      if (actionState.Performed)
+        pos->z += 0.25f;
     });
-    _window->GetInput()->BindActionOnRepeate(GLFW_KEY_A, [pos = &_camPos]()
+    _window->GetInput()->BindKeyAction(GLFW_KEY_A, [pos = &_camPos](ActionState actionState)
     {
-      pos->x -= 0.5f;
+      if (actionState.Performed)
+        pos->x -= 0.25f;
     });
-    _window->GetInput()->BindActionOnRepeate(GLFW_KEY_D, [pos = &_camPos]()
+    _window->GetInput()->BindKeyAction(GLFW_KEY_D, [pos = &_camPos](ActionState actionState)
     {
-      pos->x += 0.5f;
+      if (actionState.Performed)
+        pos->x += 0.25f;
     });
 
     glewExperimental = GL_TRUE;
@@ -153,6 +158,8 @@ namespace Importal
     while (!glfwWindowShouldClose(_window->GetHandler()))
     {
       glfwPollEvents();
+
+      _window->GetInput()->ProcessKeyActions();
 
       glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -242,7 +249,11 @@ namespace Importal
 
   void Application::HandleKeyInput(GLFWwindow* handler, int key, int scancode, int action, int mods)
   {
-    _windows[handler]->GetInput()->OnKeyInState(key, action);
+    const Input* input = _windows[handler]->GetInput();
+    if (action == GLFW_PRESS)
+      input->PressKey(key);
+    else if (action == GLFW_RELEASE)
+      input->ReleaseKey(key);
   }
 
 }

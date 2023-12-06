@@ -29,6 +29,10 @@ namespace Importal
     GLboolean CheckWindowCreationStatus();
     void LogWindowCreationError();
     void RegisterWindow();
+    void ProcessInputActions() {
+      _window->GetInput();
+
+    }
     static void HandleWindowResize(GLFWwindow* handler, GLint width, GLint height);
     static void HandleKeyInput(GLFWwindow* handler, int key, int scancode, int action, int mods);
 

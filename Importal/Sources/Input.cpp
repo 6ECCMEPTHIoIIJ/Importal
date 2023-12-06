@@ -2,74 +2,42 @@
 
 namespace Importal
 {
-  void Input::BindAction(KeyState keyState, const std::function<void()>& action) const
+  void Input::BindKeyAction(int keyCode, const std::function<void(ActionState)>& action) const
   {
-    _bindedActions[keyState] = action;
+    _keys[keyCode].Binded = true;
+    _keys[keyCode].Action = action;
   }
 
-  void Input::BindAction(int keyCode, int keyState, const std::function<void()>& action) const
+  void Input::UnbindKeyAction(int keyCode) const
   {
-    BindAction({ keyCode, keyState }, action);
+    _keys[keyCode].Binded = false;
   }
 
-  void Input::BindActionOnPress(int keyCode, const std::function<void()>& action) const
+  void Input::PressKey(int keyCode) const
   {
-    BindAction(keyCode, GLFW_PRESS, action);
+    _keys[keyCode].State.Started = true;
+    _keys[keyCode].State.Performed = true;
+    _keys[keyCode].State.Canceled = false;
   }
 
-  void Input::UnbindAction(KeyState keyState) const
+  void Input::ReleaseKey(int keyCode) const
   {
-    _bindedActions.erase(keyState);
+    _keys[keyCode].State.Started = false;
+    _keys[keyCode].State.Performed = false;
+    _keys[keyCode].State.Canceled = true;
   }
 
-  void Input::UnbindAction(int keyCode, int keyState) const
-  {
-    UnbindAction({ keyCode, keyState });
+  void Input::ProcessKeyActions() const {
+    for (int i = 0; i < _keys.size(); ++i)
+      ProcessKeyAction(i);
   }
 
-  void Input::UnbindActionOnPress(int keyCode) const
+  void Input::ProcessKeyAction(int keyCode) const
   {
-    UnbindAction(keyCode, GLFW_PRESS);
-  }
+    if (_keys[keyCode].Binded)
+      _keys[keyCode].Action(_keys[keyCode].State);
 
-  void Input::UnbindActionOnRelease(int keyCode) const
-  {
-    UnbindAction(keyCode, GLFW_RELEASE);
-  }
-
-  void Input::UnbindActionOnRepeate(int keyCode) const
-  {
-    UnbindAction(keyCode, GLFW_REPEAT);
-  }
-
-  void Input::OnKeyInState(KeyState keyState) const
-  {
-    if (_bindedActions.contains(keyState))
-      _bindedActions[keyState]();
-  }
-
-  void Input::OnKeyInState(int keyCode, int keyState) const
-  {
-    OnKeyInState({ keyCode, keyState });
-  }
-
-  void Input::OnKeyPressed(int keyCode) const
-  {
-    OnKeyInState(keyCode, GLFW_PRESS);
-  }
-
-  void Input::OnKeyReleased(int keyCode) const
-  {
-    OnKeyInState(keyCode, GLFW_RELEASE);
-  }
-
-  void Input::BindActionOnRelease(int keyCode, const std::function<void()>& action) const
-  {
-    BindAction(keyCode, GLFW_RELEASE, action);
-  }
-
-  void Input::BindActionOnRepeate(int keyCode, const std::function<void()>& action) const
-  {
-    BindAction(keyCode, GLFW_REPEAT, action);
+    _keys[keyCode].State.Started = false;
+    _keys[keyCode].State.Canceled = false;
   }
 }
