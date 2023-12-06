@@ -5,7 +5,7 @@ namespace Importal
   ArrayBuffer::ArrayBuffer(unsigned int count)
     : _count(count)
   {
-    glGenVertexArrays(1, &_id);
+    glGenVertexArrays(count, &_id);
   }
 
   void ArrayBuffer::Bind()
