@@ -21,9 +21,9 @@
   <ItemGroup>
     <ClCompile Include="Sources\Input\InputManager.cpp" />
     <ClCompile Include="Includes\Input\InputManager.h" />
-    <ClCompile Include="Sources\Input\V2ActionManager.cpp" />
-    <ClCompile Include="Sources\Input\V1ActionManager.cpp" />
-    <ClCompile Include="Sources\Input\TriggerActionManager.cpp" />
+    <ClCompile Include="Sources\Input\V2KeyActionManager.cpp" />
+    <ClCompile Include="Sources\Input\V1KeyActionManager.cpp" />
+    <ClCompile Include="Sources\Input\TriggerKeyActionManager.cpp" />
     <ClCompile Include="Sources\ArrayBuffer.cpp" />
     <ClCompile Include="Sources\IndexBuffer.cpp" />
     <ClCompile Include="Sources\Input\Key.cpp" />
@@ -82,11 +82,11 @@
     <ClInclude Include="Includes\InputAction.h" />
     <ClInclude Include="Includes\Input\Key.h" />
     <ClInclude Include="Includes\Input\KeyManager.h" />
-    <ClInclude Include="Includes\Input\V2ActionManager.h" />
+    <ClInclude Include="Includes\Input\V2KeyActionManager.h" />
     <ClInclude Include="Includes\Shader.h" />
     <ClInclude Include="Includes\Timer.h" />
-    <ClInclude Include="Includes\Input\TriggerActionManager.h" />
-    <ClInclude Include="Includes\Input\V1ActionManager.h" />
+    <ClInclude Include="Includes\Input\TriggerKeyActionManager.h" />
+    <ClInclude Include="Includes\Input\V1KeyActionManager.h" />
     <ClInclude Include="Includes\VertexBuffer.h" />
     <ClInclude Include="Includes\Window.h" />
   </ItemGroup>

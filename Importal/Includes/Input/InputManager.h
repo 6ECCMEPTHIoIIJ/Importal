@@ -3,9 +3,9 @@
 #include <array>
 
 #include "KeyManager.h"
-#include "V2ActionManager.h"
-#include "V1ActionManager.h"
-#include "TriggerActionManager.h"
+#include "V2KeyActionManager.h"
+#include "V1KeyActionManager.h"
+#include "TriggerKeyActionManager.h"
 
 namespace Importal 
 {
