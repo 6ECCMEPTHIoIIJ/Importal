@@ -54,9 +54,11 @@ namespace Importal
 
     InputManager::BindAction(GLFW_KEY_W, GLFW_KEY_A, GLFW_KEY_S, GLFW_KEY_D, [this](float xAxis, float yAxis)
     {
-      _camMoveDir = glm::vec3(-xAxis, 0.0f, -yAxis);
-      if (_camMoveDir != glm::vec3(0.0f, 0.0f, 0.0f))
-        _camMoveDir = glm::normalize(_camMoveDir);
+      auto rawInput= glm::vec3(-xAxis, 0.0f, -yAxis);
+      if (rawInput != glm::vec3(0.0f, 0.0f, 0.0f))
+        rawInput = glm::normalize(rawInput);
+
+      _camMoveDir = rawInput;
     });
 
     glewExperimental = GL_TRUE;
@@ -142,10 +144,10 @@ namespace Importal
       _camPos += _camMoveDir * _time.GetDeltaTime();
       glm::mat4 trans = glm::mat4(1.0f);
       glm::mat4 proj = glm::perspective(glm::radians(90.0f), (float)_window.GetW() / (float)_window.GetH(), 0.1f, 100.0f);
-      //trans = glm::translate(trans, glm::vec3(glm::cos((float)glfwGetTime() * 2.5231f), glm::sin((float)glfwGetTime() * 3.213f), glm::sin((float)glfwGetTime() * 5.463f)));
-      //trans = glm::rotate(trans, (float)glfwGetTime() * 1.0f, glm::vec3(0.0f, 1.0f, 0.0f));
-      //trans = glm::rotate(trans, (float)glfwGetTime() * 1.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-      //trans = glm::rotate(trans, (float)glfwGetTime() * -1.0f, glm::vec3(0.0f, 0.0f, 1.0f));
+      trans = glm::translate(trans, glm::vec3(glm::cos((float)glfwGetTime() * 2.5231f), glm::sin((float)glfwGetTime() * 3.213f), glm::sin((float)glfwGetTime() * 5.463f)));
+      trans = glm::rotate(trans, (float)glfwGetTime() * 1.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+      trans = glm::rotate(trans, (float)glfwGetTime() * 1.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+      trans = glm::rotate(trans, (float)glfwGetTime() * -1.0f, glm::vec3(0.0f, 0.0f, 1.0f));
       glm::mat4 view = glm::lookAt(_camPos,
         glm::vec3(_camPos - glm::vec3(0.0f, 0.0f, 1.0f)),
         glm::vec3(0.0f, 1.0f, 0.0f));
