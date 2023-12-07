@@ -7,13 +7,13 @@
 #include <GLM/gtc/type_ptr.hpp>
 
 #include "Shader.h"
-#include "Input.h"
+#include "Input/InputManager.h"
 
 
 namespace Importal
 {
-
-  std::unordered_map<const GLFWwindow*, Window*> Application::_windows;
+  Timer Application::_time;
+  Window Application::_window;
 
 
   Application::Application()
@@ -33,41 +33,30 @@ namespace Importal
   {
     glfwMakeContextCurrent(nullptr);
 
-    CreateWindow();
-    if (!CheckWindowCreationStatus())
+    const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+    GLFWwindow* hWnd = _window.Create(mode->width, mode->height, "Importal");
+    if (hWnd == nullptr)
     {
-      LogWindowCreationError();
+      std::cerr << "ERROR::WINDOW::NOT_SUCCESSFULLY_CREATED" << std::endl;
       return;
     }
 
-    RegisterWindow();
+    glfwMakeContextCurrent(hWnd);
+    glfwSetFramebufferSizeCallback(hWnd, HandleWindowResize);
+    glfwSetKeyCallback(hWnd, HandleKeyInput);
+    glfwSetInputMode(hWnd, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-    glfwMakeContextCurrent(_window->GetHandler());
-    glfwSetFramebufferSizeCallback(_window->GetHandler(), HandleWindowResize);
-    glfwSetKeyCallback(_window->GetHandler(), HandleKeyInput);
-    glfwSetInputMode(_window->GetHandler(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-
-    _window->GetInput()->BindKeyAction(GLFW_KEY_ESCAPE, [this](ActionState actionState)
+    InputManager::BindAction(GLFW_KEY_ESCAPE, [](const Key& key)
     {
-      if (actionState.Started)
-        glfwSetWindowShouldClose(_window->GetHandler(), GL_TRUE);
+      if (key.IsDown())
+        glfwSetWindowShouldClose(_window.GetHWnd(), GL_TRUE);
     });
 
-    _window->GetInput()->BindKeyAction(GLFW_KEY_W, [this](ActionState actionState)
+    InputManager::BindAction(GLFW_KEY_W, GLFW_KEY_A, GLFW_KEY_S, GLFW_KEY_D, [this](float xAxis, float yAxis)
     {
-      moveF = actionState.Performed;
-    });
-    _window->GetInput()->BindKeyAction(GLFW_KEY_S, [this](ActionState actionState)
-    {
-      moveB = actionState.Performed;
-    });
-    _window->GetInput()->BindKeyAction(GLFW_KEY_A, [this](ActionState actionState)
-    {
-      moveL = actionState.Performed;
-    });
-    _window->GetInput()->BindKeyAction(GLFW_KEY_D, [this](ActionState actionState)
-    {
-      moveR = actionState.Performed;
+      _camMoveDir = glm::vec3(-xAxis, 0.0f, -yAxis);
+      if (_camMoveDir != glm::vec3(0.0f, 0.0f, 0.0f))
+        _camMoveDir = glm::normalize(_camMoveDir);
     });
 
     glewExperimental = GL_TRUE;
@@ -135,44 +124,24 @@ namespace Importal
     VertexBuffer::Unbind();
     ArrayBuffer::Unbind();
 
-    ArrayBuffer ab1;
-    ab1.Bind();
-    IndexBuffer ib1(indices, sizeof(indices) / sizeof(*indices), GL_STATIC_DRAW);
-    VertexBuffer vb1(vertices, sizeof(vertices), GL_STATIC_DRAW);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
-    glEnableVertexAttribArray(0);
-
-    VertexBuffer cb1(colours + sizeof(colours) / sizeof(*colours) / 2, sizeof(colours) / 2, GL_STATIC_DRAW);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
-    glEnableVertexAttribArray(1);
-
-    VertexBuffer::Unbind();
-    ArrayBuffer::Unbind();
-
-
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
     glCullFace(GL_FRONT);
-    while (!glfwWindowShouldClose(_window->GetHandler()))
+    while (!glfwWindowShouldClose(hWnd))
     {
       glfwPollEvents();
 
       _time.Update();
-      _window->GetInput()->ProcessKeyActions();
-      int moveZ = moveB - moveF;
-      int moveX = moveR - moveL;
-
-      _camMoveDir = moveX != 0 || moveZ != 0
-        ? glm::normalize(glm::vec3(moveX, 0.0f, moveZ))
-        : glm::vec3(0.0f, 0.0f, 0.0f);
-      _camPos += _camMoveDir * _time.GetDeltaTime();
+      InputManager::ProcessActions();
+     
 
       glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
+      _camPos += _camMoveDir * _time.GetDeltaTime();
       glm::mat4 trans = glm::mat4(1.0f);
-      glm::mat4 proj = glm::perspective(glm::radians(90.0f), (float)_window->GetWidth() / (float)_window->GetHeight(), 0.1f, 100.0f);
+      glm::mat4 proj = glm::perspective(glm::radians(90.0f), (float)_window.GetW() / (float)_window.GetH(), 0.1f, 100.0f);
       //trans = glm::translate(trans, glm::vec3(glm::cos((float)glfwGetTime() * 2.5231f), glm::sin((float)glfwGetTime() * 3.213f), glm::sin((float)glfwGetTime() * 5.463f)));
       //trans = glm::rotate(trans, (float)glfwGetTime() * 1.0f, glm::vec3(0.0f, 1.0f, 0.0f));
       //trans = glm::rotate(trans, (float)glfwGetTime() * 1.0f, glm::vec3(1.0f, 0.0f, 0.0f));
@@ -192,27 +161,8 @@ namespace Importal
       glDrawElements(GL_TRIANGLES, ib.GetCount(), GL_UNSIGNED_INT, nullptr);
       ArrayBuffer::Unbind();
 
-      trans = glm::mat4(1.0f);
-      /*trans = glm::rotate(trans, (float)glfwGetTime() * -1.0f, glm::vec3(0.0f, 0.0f, 1.0f));
-      trans = glm::rotate(trans, (float)glfwGetTime() * 1.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-      trans = glm::rotate(trans, (float)glfwGetTime() * 1.0f, glm::vec3(0.0f, 1.0f, 0.0f));
-      trans = glm::translate(trans, glm::vec3(glm::cos((float)glfwGetTime() * -2.2346f), glm::sin((float)glfwGetTime() * -3.4f), glm::sin((float)glfwGetTime() * -5.643f)));*/
-
-
-      Shader::SetMat4(0, trans);
-      Shader::SetMat4(1, view);
-      Shader::SetMat4(2, proj);
-
-      shader.Use();
-
-      ab1.Bind();
-      glDrawElements(GL_TRIANGLES, ib1.GetCount(), GL_UNSIGNED_INT, nullptr);
-      ArrayBuffer::Unbind();
-
-      glfwSwapBuffers(_window->GetHandler());
+      glfwSwapBuffers(hWnd);
     }
-
-    DeleteWindow();
   }
 
   Application::~Application()
@@ -220,50 +170,17 @@ namespace Importal
     glfwTerminate();
   }
 
-  void Application::CreateWindow()
-  {
-    const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-    _window = new Window();
-    _window->Create(mode->width, mode->height, "Importal");
-  }
-
-  void Application::DeleteWindow()
-  {
-    _windows.erase(_window->GetHandler());
-    delete _window;
-  }
-
-  GLboolean Application::CheckWindowCreationStatus()
-  {
-    return _window->GetHandler() != nullptr;
-  }
-
-  void Application::LogWindowCreationError()
-  {
-    std::cerr << "ERROR::WINDOW::NOT_SUCCESSFULLY_CREATED" << std::endl;
-  }
-
-  void Application::RegisterWindow()
-  {
-    _windows[_window->GetHandler()] = _window;
-  }
-
-  void Application::ProcessInputActions() {
-    _window->GetInput();
-  }
-
   void Application::HandleWindowResize(GLFWwindow* handler, GLint width, GLint height)
   {
-    _windows[handler]->OnResize(width, height);
+    _window.OnResize(width, height);
   }
 
   void Application::HandleKeyInput(GLFWwindow* handler, int key, int scancode, int action, int mods)
   {
-    const Input* input = _windows[handler]->GetInput();
     if (action == GLFW_PRESS)
-      input->PressKey(key);
+      KeyManager::PressKey(key);
     else if (action == GLFW_RELEASE)
-      input->ReleaseKey(key);
+      KeyManager::ReleaseKey(key);
   }
 
 }

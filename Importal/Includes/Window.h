@@ -4,9 +4,6 @@
 #include <GLFW/glfw3.h>
 #include <string>
 
-
-#include "Input.h"
-
 namespace Importal
 {
   class Window
@@ -15,18 +12,16 @@ namespace Importal
     Window() = default;
     Window(const Window&) = delete;
     Window(Window&&) = delete;
-    void Create(int width, int height, const std::string& title);
-    void OnResize(int width, int height);
-    const Input* GetInput() const;
-    int GetWidth() const;
-    int GetHeight() const;
-    GLFWwindow* GetHandler();
+    GLFWwindow* Create(int w, int h, const std::string& title);
+    void OnResize(int w, int h);
+    int GetW() const;
+    int GetH() const;
+    GLFWwindow* GetHWnd();
     ~Window();
 
   private:
-    int _width = 0;
-    int _height = 0;
-    Input _input;
-    GLFWwindow* _handler = nullptr;
+    int _w = 0;
+    int _h = 0;
+    GLFWwindow* _hWnd = nullptr;
   };
 }

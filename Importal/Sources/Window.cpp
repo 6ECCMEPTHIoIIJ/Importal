@@ -3,43 +3,40 @@
 
 namespace Importal
 {
-  void Window::Create(int width, int height, const std::string& title)
+  GLFWwindow* Window::Create(int w, int h, const std::string& title)
   {
-    _width = width;
-    _height = height;
-    _handler = glfwCreateWindow(width, width, title.c_str(), nullptr, nullptr);
+    _w = w;
+    _h = h;
+    _hWnd = glfwCreateWindow(w, w, title.c_str(), nullptr, nullptr);
+
+    return _hWnd;
   }
 
-  void Window::OnResize(int width, int height)
+  void Window::OnResize(int w, int h)
   {
-    glViewport(0, 0, width, height);
-    _width = width;
-    _height = height;
+    glViewport(0, 0, w, h);
+    _w = w;
+    _h = h;
   }
 
-  const Input* Window::GetInput() const
+  int Window::GetW() const
   {
-    return &_input;
+    return _w;
   }
 
-  int Window::GetWidth() const
+  int Window::GetH() const
   {
-    return _width;
+    return _h;
   }
 
-  int Window::GetHeight() const
+  GLFWwindow* Window::GetHWnd()
   {
-    return _height;
-  }
-
-  GLFWwindow* Window::GetHandler()
-  {
-    return _handler;
+    return _hWnd;
   }
 
   Window::~Window()
   {
-    if (_handler != nullptr)
-      glfwDestroyWindow(_handler);
+    if (_hWnd != nullptr)
+      glfwDestroyWindow(_hWnd);
   }
 }

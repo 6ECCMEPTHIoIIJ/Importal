@@ -19,8 +19,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Sources\Input\InputManager.cpp" />
+    <ClCompile Include="Includes\Input\InputManager.h" />
+    <ClCompile Include="Sources\Input\V2ActionManager.cpp" />
+    <ClCompile Include="Sources\Input\V1ActionManager.cpp" />
+    <ClCompile Include="Sources\Input\TriggerActionManager.cpp" />
     <ClCompile Include="Sources\ArrayBuffer.cpp" />
     <ClCompile Include="Sources\IndexBuffer.cpp" />
+    <ClCompile Include="Sources\Input\Key.cpp" />
+    <ClCompile Include="Sources\Input\KeyManager.cpp" />
     <ClCompile Include="Sources\Timer.cpp" />
     <ClCompile Include="Sources\VertexBuffer.cpp" />
     <ClCompile Include="Sources\Window.cpp" />
@@ -43,7 +50,6 @@
       <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)\Shaders</DestinationFolders>
       <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)\Shaders</DestinationFolders>
     </CopyFileToFolders>
-    <ClCompile Include="Sources\Input.cpp" />
     <ClCompile Include="Sources\Main.cpp" />
     <ClCompile Include="Sources\Application.cpp" />
     <ClCompile Include="Sources\Shader.cpp" />
@@ -73,9 +79,14 @@
     <ClInclude Include="Includes\Application.h" />
     <ClInclude Include="Includes\ArrayBuffer.h" />
     <ClInclude Include="Includes\IndexBuffer.h" />
-    <ClInclude Include="Includes\Input.h" />
+    <ClInclude Include="Includes\InputAction.h" />
+    <ClInclude Include="Includes\Input\Key.h" />
+    <ClInclude Include="Includes\Input\KeyManager.h" />
+    <ClInclude Include="Includes\Input\V2ActionManager.h" />
     <ClInclude Include="Includes\Shader.h" />
     <ClInclude Include="Includes\Timer.h" />
+    <ClInclude Include="Includes\Input\TriggerActionManager.h" />
+    <ClInclude Include="Includes\Input\V1ActionManager.h" />
     <ClInclude Include="Includes\VertexBuffer.h" />
     <ClInclude Include="Includes\Window.h" />
   </ItemGroup>
