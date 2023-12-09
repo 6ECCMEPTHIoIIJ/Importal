@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Includes\Camera.cpp" />
+    <ClCompile Include="Sources\Camera.cpp" />
     <ClCompile Include="Sources\GlExt.cpp" />
     <ClCompile Include="Sources\Input\InputManager.cpp" />
     <ClCompile Include="Includes\Input\InputManager.h" />
