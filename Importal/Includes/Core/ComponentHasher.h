@@ -9,7 +9,7 @@ namespace Importal::Core {
     template<class T>
     Hash operator()(const T& key) const
     {
-      static_assert(std::is_base_of_v<T, GameComponent>);
+      static_assert(std::is_base_of_v<GameComponent, T>);
 
       return typeid(key).hash_code();
     }
@@ -17,7 +17,7 @@ namespace Importal::Core {
     template<class T>
     Hash operator()() const
     {
-      static_assert(std::is_base_of_v<T, GameComponent>);
+      static_assert(std::is_base_of_v<GameComponent, T>);
 
       return typeid(T).hash_code();
     }
