@@ -7,10 +7,12 @@ namespace Importal::Core {
     Location();
 
     void AddGameObject(GameObject* object);
+    GameObject* AddGameObject();
+
     void RemoveGameObject(GameObject* object);
 
     void Tick(double deltaTime);
-    void Render();
+    void Render()
 
 #pragma region Removed ctors
 
@@ -20,7 +22,7 @@ namespace Importal::Core {
 #pragma endregion
 
   private:
-    std::vector<GameObject> _gameObjects = std::vector<GameObject>();
+    std::vector<GameObject*> _gameObjects = std::vector<GameObject*>();
   };
 }
 

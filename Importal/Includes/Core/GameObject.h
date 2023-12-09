@@ -9,7 +9,7 @@ class GameComponent;
 
 
 namespace Importal::Core {
-  class GameObject
+  class GameObject final
   {
   public:
 #pragma region Ctors
@@ -20,7 +20,7 @@ namespace Importal::Core {
 
 #pragma endregion
 
-    void Deatach(GameObject* child);
+    /*void Deatach(GameObject* child);*/
 
     GameObject* Parent();
     std::vector<GameObject*> Children();
@@ -29,9 +29,12 @@ namespace Importal::Core {
 
     template<class T, class ...Args>
       requires std::is_base_of_v<GameComponent, T>
-    T* AddComponent(Args... args) {
-      static_assert(std::is_base_of<GameComponent, T>);
-    }
+    T* AddComponent(Args... args);
+
+    template<class T, class ...Args>
+      requires std::is_base_of_v<GameComponent, T>
+    T* GetCompoent();
+
 
 #pragma region Removed ctors
 
@@ -44,7 +47,6 @@ namespace Importal::Core {
     GameObject* _parent = nullptr;
     std::vector<GameObject*> _children = std::vector<GameObject*>();
     static ComponentHasher _hasher;
-
   };
 }
 

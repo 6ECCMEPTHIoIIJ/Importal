@@ -17,5 +17,8 @@ namespace Importal::Core {
     void Tick(double deltaTime);
 
 #pragma endregion
+
+  private:
+    bool _enabled = true;
   };
 }

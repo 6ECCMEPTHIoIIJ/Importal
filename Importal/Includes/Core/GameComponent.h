@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Core/GameObject.h>
+#include "BaseComponents/Transform.h"
 
 namespace Importal::Core {
   class GameComponent
@@ -24,7 +25,7 @@ namespace Importal::Core {
   private:
     Importal::Core::GameObject* _gameObject = nullptr;
 
-    //TODO : transform
+    Transform* _transform;
   };
 }
 

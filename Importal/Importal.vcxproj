@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Sources\Core\BaseComponents\BehaviourComponent.cpp" />
+    <ClCompile Include="Sources\Core\BaseComponents\Transform.cpp" />
     <ClCompile Include="Sources\Core\ComponentHasher.cpp" />
     <ClCompile Include="Sources\Core\Location.cpp" />
     <ClCompile Include="Sources\Core\GameComponent.cpp" />
@@ -82,6 +83,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Includes\Core\BaseComponents\BehaviourComponent.h" />
+    <ClInclude Include="Includes\Core\BaseComponents\Transform.h" />
     <ClInclude Include="Includes\Core\ComponentHasher.h" />
     <ClInclude Include="Includes\Core\GameComponent.h" />
     <ClInclude Include="Includes\Application.h" />
