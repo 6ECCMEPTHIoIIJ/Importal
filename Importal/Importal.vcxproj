@@ -30,6 +30,7 @@
     <ClCompile Include="Sources\Input\KeyManager.cpp" />
     <ClCompile Include="Sources\Timer.cpp" />
     <ClCompile Include="Sources\VertexBuffer.cpp" />
+    <ClCompile Include="Sources\VertexBufferLayout.cpp" />
     <ClCompile Include="Sources\Window.cpp" />
     <CopyFileToFolders Include="Shaders\VertexShader.glsl">
       <FileType>Document</FileType>
@@ -88,6 +89,7 @@
     <ClInclude Include="Includes\Input\TriggerKeyActionManager.h" />
     <ClInclude Include="Includes\Input\V1KeyActionManager.h" />
     <ClInclude Include="Includes\VertexBuffer.h" />
+    <ClInclude Include="Includes\VertexBufferLayout.h" />
     <ClInclude Include="Includes\Window.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
