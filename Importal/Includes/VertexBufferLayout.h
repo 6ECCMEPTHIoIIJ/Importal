@@ -4,12 +4,13 @@
 #include <GLFW/glfw3.h>
 #include <vector>
 
-namespace Importal {
+namespace Importal 
+{
 		struct VBElement
 		{
 				GLuint type;
 				GLuint count;
-				GLint normalized;
+				GLubyte normalized;
 
 				static unsigned int GetTypeSize(GLuint type);
 		};
@@ -21,9 +22,10 @@ namespace Importal {
 				~VertexBufferLayout() = default;
 
 				const std::vector<VBElement>& GetElements() const;
+				GLuint GetStride() const;
 
 		public:
-				void Push(GLuint count, GLuint type, GLint normalized = 0);
+				void Push(GLuint count, GLuint type, GLubyte normalized = 0);
 		private:
 				std::vector<VBElement> _elements;
 				GLuint _stride{ 0 };

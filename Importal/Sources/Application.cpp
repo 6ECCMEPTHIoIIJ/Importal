@@ -108,14 +108,21 @@ namespace Importal
 
     ArrayBuffer ab;
     ab.Bind();
-    IndexBuffer ib(indices, sizeof(indices) / sizeof(*indices), GL_STATIC_DRAW);
-    VertexBuffer vb(vertices, sizeof(vertices), GL_STATIC_DRAW);
-    GL_CALL(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0));
-    GL_CALL(glEnableVertexAttribArray(0));
+    
+    VertexBuffer vb(vertices, 3 * 2 * 8 * sizeof(GLfloat), GL_STATIC_DRAW);
+    VertexBufferLayout vb_layout;
+    vb_layout.Push(GL_FLOAT, 3);
+    vb_layout.Push(GL_FLOAT, 3);
+    ab.AddBuffer(vb, vb_layout);
 
-    VertexBuffer cb(colours, sizeof(colours) / 2, GL_STATIC_DRAW);
-    GL_CALL(glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0));
-    GL_CALL(glEnableVertexAttribArray(1));
+   // GL_CALL(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0));
+   // GL_CALL(glEnableVertexAttribArray(0));
+
+   // VertexBuffer cb(colours, sizeof(colours) / 2, GL_STATIC_DRAW);
+   // GL_CALL(glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0));
+   // GL_CALL(glEnableVertexAttribArray(1));
+
+    IndexBuffer ib(indices, sizeof(indices) / sizeof(*indices), GL_STATIC_DRAW);
 
     VertexBuffer::Unbind();
     ArrayBuffer::Unbind();
