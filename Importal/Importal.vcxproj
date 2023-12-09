@@ -19,6 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Sources\Core\Location.cpp" />
+    <ClCompile Include="Sources\Core\GameComponent.cpp" />
+    <ClCompile Include="Sources\Core\GameObject.cpp" />
     <ClCompile Include="Sources\Input\InputManager.cpp" />
     <ClCompile Include="Includes\Input\InputManager.h" />
     <ClCompile Include="Sources\Input\V2KeyActionManager.cpp" />
@@ -76,8 +79,11 @@
     </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Includes\Core\GameComponent.h" />
     <ClInclude Include="Includes\Application.h" />
     <ClInclude Include="Includes\ArrayBuffer.h" />
+    <ClInclude Include="Includes\Core\GameObject.h" />
+    <ClInclude Include="Includes\Core\Location.h" />
     <ClInclude Include="Includes\IndexBuffer.h" />
     <ClInclude Include="Includes\InputAction.h" />
     <ClInclude Include="Includes\Input\Key.h" />
