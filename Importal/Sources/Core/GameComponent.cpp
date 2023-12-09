@@ -1,1 +1,1 @@
-#include <../Includes/Core/GameComponent.h>
+#include "Core/GameComponent.h"

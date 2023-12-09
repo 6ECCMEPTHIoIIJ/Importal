@@ -19,6 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Sources\Core\BaseComponents\BehaviourComponent.cpp" />
+    <ClCompile Include="Sources\Core\ComponentHasher.cpp" />
     <ClCompile Include="Sources\Core\Location.cpp" />
     <ClCompile Include="Sources\Core\GameComponent.cpp" />
     <ClCompile Include="Sources\Core\GameObject.cpp" />
@@ -79,6 +81,8 @@
     </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Includes\Core\BaseComponents\BehaviourComponent.h" />
+    <ClInclude Include="Includes\Core\ComponentHasher.h" />
     <ClInclude Include="Includes\Core\GameComponent.h" />
     <ClInclude Include="Includes\Application.h" />
     <ClInclude Include="Includes\ArrayBuffer.h" />
@@ -172,7 +176,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>.\Includes;..\Dependencies\Glfw338\Include;..\Dependencies\Glew220\Include;..\Dependencies\Glm0998\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\Includes\Core\BaseComponents;.\Includes\Core;.\Includes;..\Dependencies\Glfw338\Include;..\Dependencies\Glew220\Include;..\Dependencies\Glm0998\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
