@@ -1,15 +1,20 @@
 #include "VertexBufferLayout.h"
 #include <stdexcept>
 
-namespace Importal {
+namespace Importal 
+{
 		const std::vector<VBElement>& VertexBufferLayout::GetElements() const
 		{
 				return _elements;
 		}
-		void Importal::VertexBufferLayout::Push(GLuint type, GLuint count, GLint normalized)
+		GLuint VertexBufferLayout::GetStride() const
+		{
+				return _stride;
+		}
+		void Importal::VertexBufferLayout::Push(GLuint type, GLuint count, GLubyte normalized)
 		{
 				_elements.push_back({ type, count, normalized });
-				_stride += VBElement::GetTypeSize(type);
+				_stride += VBElement::GetTypeSize(type) * count;
 		}
 
 		unsigned int Importal::VBElement::GetTypeSize(GLuint type)
