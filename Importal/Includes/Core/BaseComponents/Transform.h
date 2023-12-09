@@ -9,9 +9,8 @@ namespace Importal::Core {
   class Transform :
     public GameComponent
   {
-    /* Transform(Transform* transfrom) {
-     }*/
-
+    Transform(Transform* transform);
+    Transform(glm::vec3 position);
 
 
   private:
