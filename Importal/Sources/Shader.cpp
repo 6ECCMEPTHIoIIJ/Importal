@@ -6,8 +6,12 @@
 #include <sstream>
 #include <format>
 
+#include "GlExt.h"
+
 namespace Importal
 {
+  GLuint Shader::_curProgram = 0;
+
   Shader::ShaderData::ShaderData(const std::string& shaderFilename)
   {
     try
@@ -28,8 +32,8 @@ namespace Importal
   void Shader::ShaderData::Compile(GLuint shaderType)
   {
     _shader = glCreateShader(shaderType);
-    glShaderSource(_shader, 1, &_code, NULL);
-    glCompileShader(_shader);
+    GL_CALL(glShaderSource(_shader, 1, &_code, NULL));
+    GL_CALL(glCompileShader(_shader));
   }
 
   void Shader::ShaderData::CompileAsVertex()
@@ -45,36 +49,36 @@ namespace Importal
   void Shader::ShaderData::LinkWith(ShaderData& other)
   {
     other._program = _program = glCreateProgram();
-    glAttachShader(_program, _shader);
-    glAttachShader(_program, other._shader);
-    glLinkProgram(_program);
+    GL_CALL(glAttachShader(_program, _shader));
+    GL_CALL(glAttachShader(_program, other._shader));
+    GL_CALL(glLinkProgram(_program));
   }
 
   GLboolean Shader::ShaderData::CheckCompilationStatus() const
   {
     GLint success;
-    glGetShaderiv(_shader, GL_COMPILE_STATUS, &success);
+    GL_CALL(glGetShaderiv(_shader, GL_COMPILE_STATUS, &success));
     return success;
   }
 
   GLboolean Shader::ShaderData::CheckLinkingStatus() const
   {
     GLint success;
-    glGetProgramiv(_program, GL_COMPILE_STATUS, &success);
+    GL_CALL(glGetProgramiv(_program, GL_LINK_STATUS, &success));
     return success;
   }
 
   void Shader::ShaderData::LogCompilationError() const
   {
     GLchar infoLog[1024];
-    glGetShaderInfoLog(_shader, 1024, NULL, infoLog);
+    GL_CALL(glGetShaderInfoLog(_shader, 1024, NULL, infoLog));
     std::cerr << std::format("ERROR::SHADER_COMPILATION_ERROR\n{}", infoLog) << std::endl;
   }
 
   void Shader::ShaderData::LogLinkingError() const
   {
     GLchar infoLog[1024];
-    glGetProgramInfoLog(_program, 1024, NULL, infoLog);
+    GL_CALL(glGetProgramInfoLog(_program, 1024, NULL, infoLog));
     std::cerr << std::format("ERROR::PROGRAM_LINKING_ERROR\n{}", infoLog) << std::endl;
   }
 
@@ -86,7 +90,7 @@ namespace Importal
   Shader::ShaderData::~ShaderData()
   {
     if (_shader != 0)
-      glDeleteShader(_shader);
+      GL_CALL(glDeleteShader(_shader));
   }
 
   Shader::Shader(const std::string& vShaderFilename, const std::string& fShaderFilename)
@@ -110,131 +114,132 @@ namespace Importal
 
   void Shader::Use()
   {
-    glUseProgram(_program);
+    _curProgram = _program;
+    GL_CALL(glUseProgram(_program));
   }
 
-  void Shader::SetBool(const std::string& name, bool value) const
+  void Shader::SetBool(const std::string& name, bool value)
   {
-    SetBool(glGetUniformLocation(_program, name.c_str()), value);
+    SetBool(glGetUniformLocation(_curProgram, name.c_str()), value);
   }
 
-  void Shader::SetInt(const std::string& name, int value) const
+  void Shader::SetInt(const std::string& name, int value)
   {
-    SetInt(glGetUniformLocation(_program, name.c_str()), value);
+    SetInt(glGetUniformLocation(_curProgram, name.c_str()), value);
   }
 
-  void Shader::SetFloat(const std::string& name, float value) const
+  void Shader::SetFloat(const std::string& name, float value)
   {
-    SetFloat(glGetUniformLocation(_program, name.c_str()), (GLfloat)value);
+    SetFloat(glGetUniformLocation(_curProgram, name.c_str()), (GLfloat)value);
   }
 
-  void Shader::SetVec2(const std::string& name, const glm::vec2& value) const
+  void Shader::SetVec2(const std::string& name, const glm::vec2& value)
   {
-    SetVec2(glGetUniformLocation(_program, name.c_str()), value);
+    SetVec2(glGetUniformLocation(_curProgram, name.c_str()), value);
   }
 
-  void Shader::SetVec2(const std::string& name, float x, float y) const
+  void Shader::SetVec2(const std::string& name, float x, float y)
   {
-    SetVec2(glGetUniformLocation(_program, name.c_str()), (GLfloat)x, (GLfloat)y);
+    SetVec2(glGetUniformLocation(_curProgram, name.c_str()), (GLfloat)x, (GLfloat)y);
   }
 
-  void Shader::SetVec3(const std::string& name, const glm::vec3& value) const
+  void Shader::SetVec3(const std::string& name, const glm::vec3& value)
   {
-    SetVec3(glGetUniformLocation(_program, name.c_str()), value);
+    SetVec3(glGetUniformLocation(_curProgram, name.c_str()), value);
   }
 
-  void Shader::SetVec3(const std::string& name, float x, float y, float z) const
+  void Shader::SetVec3(const std::string& name, float x, float y, float z)
   {
-    SetVec3(glGetUniformLocation(_program, name.c_str()), (GLfloat)x, (GLfloat)y, (GLfloat)z);
+    SetVec3(glGetUniformLocation(_curProgram, name.c_str()), (GLfloat)x, (GLfloat)y, (GLfloat)z);
   }
 
-  void Shader::SetVec4(const std::string& name, const glm::vec4& value) const
+  void Shader::SetVec4(const std::string& name, const glm::vec4& value)
   {
-    SetVec4(glGetUniformLocation(_program, name.c_str()), value);
+    SetVec4(glGetUniformLocation(_curProgram, name.c_str()), value);
   }
 
-  void Shader::SetVec4(const std::string& name, float x, float y, float z, float w) const
+  void Shader::SetVec4(const std::string& name, float x, float y, float z, float w)
   {
-    SetVec4(glGetUniformLocation(_program, name.c_str()), (GLfloat)x, (GLfloat)y, (GLfloat)z, (GLfloat)w);
+    SetVec4(glGetUniformLocation(_curProgram, name.c_str()), (GLfloat)x, (GLfloat)y, (GLfloat)z, (GLfloat)w);
   }
 
-  void Shader::SetMat2(const std::string& name, const glm::mat2& mat) const
+  void Shader::SetMat2(const std::string& name, const glm::mat2& mat)
   {
-    SetMat2(glGetUniformLocation(_program, name.c_str()), mat);
+    SetMat2(glGetUniformLocation(_curProgram, name.c_str()), mat);
   }
 
-  void Shader::SetMat3(const std::string& name, const glm::mat3& mat) const
+  void Shader::SetMat3(const std::string& name, const glm::mat3& mat)
   {
-    SetMat3(glGetUniformLocation(_program, name.c_str()), mat);
+    SetMat3(glGetUniformLocation(_curProgram, name.c_str()), mat);
   }
 
-  void Shader::SetMat4(const std::string& name, const glm::mat4& mat) const
+  void Shader::SetMat4(const std::string& name, const glm::mat4& mat)
   {
-    SetMat4(glGetUniformLocation(_program, name.c_str()), mat);
+    SetMat4(glGetUniformLocation(_curProgram, name.c_str()), mat);
   }
 
-  void Shader::SetBool(unsigned int layout, bool value)
+  void Shader::SetBool(int layout, bool value)
   {
-    glUniform1i(layout, (GLint)value);
+    GL_CALL(glUniform1i(layout, (GLint)value));
   }
 
-  void Shader::SetInt(unsigned int layout, int value)
+  void Shader::SetInt(int layout, int value)
   {
-    glUniform1i(layout, (GLint)value);
+    GL_CALL(glUniform1i(layout, (GLint)value));
   }
 
-  void Shader::SetFloat(unsigned int layout, float value)
+  void Shader::SetFloat(int layout, float value)
   {
-    glUniform1f(layout, (GLfloat)value);
+    GL_CALL(glUniform1f(layout, (GLfloat)value));
   }
 
-  void Shader::SetVec2(unsigned int layout, const glm::vec2& value)
+  void Shader::SetVec2(int layout, const glm::vec2& value)
   {
-    glUniform2fv(layout, 1, &value[0]);
+    GL_CALL(glUniform2fv(layout, 1, glm::value_ptr(value)));
   }
 
-  void Shader::SetVec2(unsigned int layout, float x, float y)
+  void Shader::SetVec2(int layout, float x, float y)
   {
-    glUniform2f(layout, (GLfloat)x, (GLfloat)y);
+    GL_CALL(glUniform2f(layout, (GLfloat)x, (GLfloat)y));
   }
 
-  void Shader::SetVec3(unsigned int layout, const glm::vec3& value)
+  void Shader::SetVec3(int layout, const glm::vec3& value)
   {
-    glUniform3fv(layout, 1, &value[0]);
+    GL_CALL(glUniform3fv(layout, 1, glm::value_ptr(value)));
   }
 
-  void Shader::SetVec3(unsigned int layout, float x, float y, float z)
+  void Shader::SetVec3(int layout, float x, float y, float z)
   {
-    glUniform3f(layout, (GLfloat)x, (GLfloat)y, (GLfloat)z);
+    GL_CALL(glUniform3f(layout, (GLfloat)x, (GLfloat)y, (GLfloat)z));
   }
 
-  void Shader::SetVec4(unsigned int layout, const glm::vec4& value)
+  void Shader::SetVec4(int layout, const glm::vec4& value)
   {
-    glUniform4fv(layout, 1, &value[0]);
+    GL_CALL(glUniform4fv(layout, 1, glm::value_ptr(value)));
   }
 
-  void Shader::SetVec4(unsigned int layout, float x, float y, float z, float w)
+  void Shader::SetVec4(int layout, float x, float y, float z, float w)
   {
-    glUniform4f(layout, (GLfloat)x, (GLfloat)y, (GLfloat)z, (GLfloat)w);
+    GL_CALL(glUniform4f(layout, (GLfloat)x, (GLfloat)y, (GLfloat)z, (GLfloat)w));
   }
 
-  void Shader::SetMat2(unsigned int layout, const glm::mat2& mat)
+  void Shader::SetMat2(int layout, const glm::mat2& mat)
   {
-    glUniformMatrix2fv(layout, 1, GL_FALSE, &mat[0][0]);
+    GL_CALL(glUniformMatrix2fv(layout, 1, GL_FALSE, glm::value_ptr(mat)));
   }
 
-  void Shader::SetMat3(unsigned int layout, const glm::mat3& mat)
+  void Shader::SetMat3(int layout, const glm::mat3& mat)
   {
-    glUniformMatrix3fv(layout, 1, GL_FALSE, &mat[0][0]);
+    GL_CALL(glUniformMatrix3fv(layout, 1, GL_FALSE, glm::value_ptr(mat)));
   }
 
-  void Shader::SetMat4(unsigned int layout, const glm::mat4& mat)
+  void Shader::SetMat4(int layout, const glm::mat4& mat)
   {
-    glUniformMatrix4fv(layout, 1, GL_FALSE, &mat[0][0]);
+    GL_CALL(glUniformMatrix4fv(layout, 1, GL_FALSE, glm::value_ptr(mat)));
   }
 
   Shader::~Shader()
   {
-    glDeleteProgram(_program);
+    GL_CALL(glDeleteProgram(_program));
   }
 }

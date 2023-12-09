@@ -27,6 +27,5 @@ namespace Importal {
     _triggerKeyManager.ProcessActions();
     KeyManager::ProcessKeys();
   }
-
 }
 

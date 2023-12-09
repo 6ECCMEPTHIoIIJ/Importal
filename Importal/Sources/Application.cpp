@@ -9,6 +9,7 @@
 #include "Shader.h"
 #include "Input/InputManager.h"
 
+#include "GlExt.h"
 
 namespace Importal
 {
@@ -76,36 +77,18 @@ namespace Importal
     glewInit();
 
     auto shader = Shader("Shaders/VertexShader.glsl", "Shaders/FragmentShader.glsl");
+    shader.Use();
+
 
     GLfloat vertices[] = {
-      0.5f, -0.5f, 0.5f,
-      -0.5f, -0.5f, 0.5f,
-      -0.5f,  0.5f, 0.5f,
-      0.5f,  0.5f, 0.5f,
-      0.5f, -0.5f, -0.5f,
-      -0.5f, -0.5f, -0.5f,
-      -0.5f,  0.5f, -0.5f,
-      0.5f,  0.5f, -0.5f,
-    };
-
-    GLfloat colours[] = {
-      1.0f, 0.0f, 1.0f,
-      1.0f, 1.0f, 1.0f,
-      0.0f, 1.0f, 1.0f,
-      0.0f, 0.0f, 1.0f,
-      0.0f, 1.0f, 1.0f,
-      0.0f, 1.0f, 0.0f,
-      1.0f, 0.0f, 0.0f,
-      1.0f, 1.0f, 0.0f,
-
-      0.0f, 0.0f, 0.0f,
-      1.0f, 1.0f, 1.0f,
-      0.5f, 1.0f, 1.0f,
-      0.5f, 0.5f, 1.0f,
-      0.5f, 1.0f, 1.0f,
-      0.5f, 1.0f, 0.5f,
-      1.0f, 0.5f, 0.5f,
-      1.0f, 1.0f, 0.0f,
+      0.5f,  -0.5f,  0.5f, 1.0f, 0.0f, 1.0f,
+      -0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f,
+      -0.5f,  0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
+      0.5f,   0.5f,  0.5f, 0.0f, 0.0f, 1.0f,
+      0.5f,  -0.5f, -0.5f, 0.0f, 1.0f, 1.0f,
+      -0.5f, -0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+      -0.5f,  0.5f, -0.5f, 1.0f, 0.0f, 0.0f,
+      0.5f,   0.5f, -0.5f, 1.0f, 1.0f, 0.0f,
     };
 
     GLuint indices[] = {
@@ -127,12 +110,12 @@ namespace Importal
     ab.Bind();
     IndexBuffer ib(indices, sizeof(indices) / sizeof(*indices), GL_STATIC_DRAW);
     VertexBuffer vb(vertices, sizeof(vertices), GL_STATIC_DRAW);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
-    glEnableVertexAttribArray(0);
+    GL_CALL(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0));
+    GL_CALL(glEnableVertexAttribArray(0));
 
     VertexBuffer cb(colours, sizeof(colours) / 2, GL_STATIC_DRAW);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
-    glEnableVertexAttribArray(1);
+    GL_CALL(glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0));
+    GL_CALL(glEnableVertexAttribArray(1));
 
     VertexBuffer::Unbind();
     ArrayBuffer::Unbind();
@@ -154,36 +137,33 @@ namespace Importal
 
       glm::mat4 trans = glm::mat4(1.0f);
       glm::mat4 proj = glm::perspective(glm::radians(90.0f), (float)_window.GetW() / (float)_window.GetH(), 0.1f, 100.0f);
-      //trans = glm::translate(trans, glm::vec3(glm::cos((float)glfwGetTime() * 2.5231f), glm::sin((float)glfwGetTime() * 3.213f), glm::sin((float)glfwGetTime() * 5.463f)));
-      //trans = glm::rotate(trans, (float)glfwGetTime() * 1.0f, glm::vec3(0.0f, 1.0f, 0.0f));
-      //trans = glm::rotate(trans, (float)glfwGetTime() * 1.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-      //trans = glm::rotate(trans, (float)glfwGetTime() * -1.0f, glm::vec3(0.0f, 0.0f, 1.0f));
+      trans = glm::translate(trans, glm::vec3(glm::cos((float)glfwGetTime() * 2.5231f), glm::sin((float)glfwGetTime() * 3.213f), glm::sin((float)glfwGetTime() * 5.463f)));
+      trans = glm::rotate(trans, (float)glfwGetTime() * 1.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+      trans = glm::rotate(trans, (float)glfwGetTime() * 1.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+      trans = glm::rotate(trans, (float)glfwGetTime() * -1.0f, glm::vec3(0.0f, 0.0f, 1.0f));
       glm::mat4 view = glm::lookAt(_camPos,
         glm::vec3(_camPos - _camFront),
         glm::vec3(0.0f, 1.0f, 0.0f));
-
 
       Shader::SetMat4(0, trans);
       Shader::SetMat4(1, view);
       Shader::SetMat4(2, proj);
 
-      shader.Use();
 
       ab.Bind();
       glDrawElements(GL_TRIANGLES, ib.GetCount(), GL_UNSIGNED_INT, nullptr);
       ArrayBuffer::Unbind();
 
       trans = glm::translate(trans, glm::vec3(0.5f, 0.5f, 0.5f));
-      //trans = glm::translate(trans, glm::vec3(glm::cos((float)glfwGetTime() * -2.5231f), glm::sin((float)glfwGetTime() * -3.213f), glm::sin((float)glfwGetTime() * 5.463f)));
-      //trans = glm::rotate(trans, (float)glfwGetTime() * 1.0f, glm::vec3(0.0f, 1.0f, 0.0f));
-      //trans = glm::rotate(trans, (float)glfwGetTime() * 1.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-      //trans = glm::rotate(trans, (float)glfwGetTime() * -1.0f, glm::vec3(0.0f, 0.0f, 1.0f));
-
+      trans = glm::translate(trans, glm::vec3(glm::cos((float)glfwGetTime() * -2.5231f), glm::sin((float)glfwGetTime() * -3.213f), glm::sin((float)glfwGetTime() * 5.463f)));
+      trans = glm::rotate(trans, (float)glfwGetTime() * 1.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+      trans = glm::rotate(trans, (float)glfwGetTime() * 1.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+      trans = glm::rotate(trans, (float)glfwGetTime() * -1.0f, glm::vec3(0.0f, 0.0f, 1.0f));
+      
       Shader::SetMat4(0, trans);
       Shader::SetMat4(1, view);
       Shader::SetMat4(2, proj);
 
-      shader.Use();
 
       ab.Bind();
       glDrawElements(GL_TRIANGLES, ib.GetCount(), GL_UNSIGNED_INT, nullptr);
