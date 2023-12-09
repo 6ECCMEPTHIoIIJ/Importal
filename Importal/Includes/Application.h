@@ -28,17 +28,6 @@ namespace Importal
     static void HandleKeyInput(GLFWwindow* handler, int key, int scancode, int action, int mods);
     static void HandleMouseInput(GLFWwindow* window, double xpos, double ypos);
 
-    glm::vec3 _camPos = glm::vec3(0.0f, 0.0f, 3.0f);
-    glm::vec3 _camFront = glm::vec3(0.0f, 0.0f, -1.0f);
-    glm::vec3 _camUp = glm::vec3(0.0f, 1.0f, 0.0f);
-    glm::vec3 _direction;
-    static double _lastX;
-    static double _lastY;
-    static float _offsetX;
-    static float _offsetY;
-    static float _yaw;
-    static float _pitch;
-
     static Timer _time;
     static Window _window;
   };

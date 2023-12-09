@@ -8,20 +8,13 @@
 
 #include "Shader.h"
 #include "Input/InputManager.h"
-
+#include "Camera.h"
 #include "GlExt.h"
 
 namespace Importal
 {
   Timer Application::_time;
   Window Application::_window;
-  double Application::_lastX = 1920 / 2;
-  double Application::_lastY = 1080 / 2;
-  float Application::_offsetX;
-  float Application::_offsetY;
-  float Application::_yaw = 0.0f;
-  float Application::_pitch = 0.0f;
-
 
   Application::Application()
   {
@@ -62,15 +55,7 @@ namespace Importal
 
     InputManager::BindAction(GLFW_KEY_W, GLFW_KEY_A, GLFW_KEY_S, GLFW_KEY_D, [this](float xAxis, float yAxis)
     {
-      _direction.x = cos(glm::radians(_yaw)) * cos(glm::radians(_pitch));
-      _direction.y = sin(glm::radians(_pitch));
-      _direction.z = sin(glm::radians(_yaw)) * cos(glm::radians(_pitch));
-      _camFront = glm::normalize(_direction);
-      auto rawInput = -yAxis * _camFront + xAxis * glm::normalize(glm::cross(_camFront, _camUp));
-      if (rawInput != glm::vec3(0.0f, 0.0f, 0.0f))
-        rawInput = glm::normalize(rawInput);
-
-      _camPos += rawInput * _time.GetDeltaTime();
+      Camera::MoveRelationly(glm::vec3(xAxis, -yAxis, 0.0f), _time.GetDeltaTime());
     });
 
     glewExperimental = GL_TRUE;
@@ -144,13 +129,8 @@ namespace Importal
 
       glm::mat4 trans = glm::mat4(1.0f);
       glm::mat4 proj = glm::perspective(glm::radians(90.0f), (float)_window.GetW() / (float)_window.GetH(), 0.1f, 100.0f);
-      trans = glm::translate(trans, glm::vec3(glm::cos((float)glfwGetTime() * 2.5231f), glm::sin((float)glfwGetTime() * 3.213f), glm::sin((float)glfwGetTime() * 5.463f)));
-      trans = glm::rotate(trans, (float)glfwGetTime() * 1.0f, glm::vec3(0.0f, 1.0f, 0.0f));
-      trans = glm::rotate(trans, (float)glfwGetTime() * 1.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-      trans = glm::rotate(trans, (float)glfwGetTime() * -1.0f, glm::vec3(0.0f, 0.0f, 1.0f));
-      glm::mat4 view = glm::lookAt(_camPos,
-        glm::vec3(_camPos - _camFront),
-        glm::vec3(0.0f, 1.0f, 0.0f));
+
+      glm::mat4 view = Camera::GetView();
 
       Shader::SetMat4(0, trans);
       Shader::SetMat4(1, view);
@@ -162,10 +142,6 @@ namespace Importal
       ArrayBuffer::Unbind();
 
       trans = glm::translate(trans, glm::vec3(0.5f, 0.5f, 0.5f));
-      trans = glm::translate(trans, glm::vec3(glm::cos((float)glfwGetTime() * -2.5231f), glm::sin((float)glfwGetTime() * -3.213f), glm::sin((float)glfwGetTime() * 5.463f)));
-      trans = glm::rotate(trans, (float)glfwGetTime() * 1.0f, glm::vec3(0.0f, 1.0f, 0.0f));
-      trans = glm::rotate(trans, (float)glfwGetTime() * 1.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-      trans = glm::rotate(trans, (float)glfwGetTime() * -1.0f, glm::vec3(0.0f, 0.0f, 1.0f));
       
       Shader::SetMat4(0, trans);
       Shader::SetMat4(1, view);
@@ -200,22 +176,7 @@ namespace Importal
 
   void Application::HandleMouseInput(GLFWwindow* window, double xpos, double ypos)
   {
-    _offsetX = xpos - _lastX;
-    _offsetY = _lastY - ypos;
-    _lastX = xpos;
-    _lastY = ypos;
-
-    const float sensitivity = 0.05f;
-    _offsetX *= sensitivity;
-    _offsetY *= sensitivity;
-
-    _yaw += _offsetX;
-    _pitch -= _offsetY;
-
-    if (_pitch > 89.9f)
-      _pitch = 89.9f;
-    if (_pitch < -89.9f)
-      _pitch = -89.9f;
+    Camera::OnMouseMove(xpos, ypos);
   }
 
 }
