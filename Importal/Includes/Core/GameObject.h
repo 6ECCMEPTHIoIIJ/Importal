@@ -23,11 +23,12 @@ namespace Importal::Core {
     void Deatach(GameObject* child);
 
     GameObject* Parent();
-    std::vector<GameObject*> Child();
+    std::vector<GameObject*> Children();
 
     bool AddComponent(GameComponent* component);
 
     template<class T, class ...Args>
+      requires std::is_base_of_v<GameComponent, T>
     T* AddComponent(Args... args) {
       static_assert(std::is_base_of<GameComponent, T>);
     }
@@ -41,7 +42,7 @@ namespace Importal::Core {
 
   private:
     GameObject* _parent = nullptr;
-    std::vector<GameObject*> _child = std::vector<GameObject*>();
+    std::vector<GameObject*> _children = std::vector<GameObject*>();
     static ComponentHasher _hasher;
 
   };
