@@ -15,10 +15,8 @@ namespace Importal::Core {
 
 
   private:
-    glm::vec3
-      _x = glm::vec3(0, 0, 0),
-      _y = glm::vec3(0, 0, 0),
-      _z = glm::vec3(0, 0, 0);
+    glm::vec3 _position = glm::vec3(0, 0, 0);
+
     double _xScale = 1, _yScale = 1, _zScale = 1;
   };
 }
