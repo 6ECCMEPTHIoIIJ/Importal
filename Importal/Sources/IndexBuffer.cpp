@@ -1,13 +1,15 @@
 #include "IndexBuffer.h"
 
+#include "GlExt.h"
+
 namespace Importal
 {
   IndexBuffer::IndexBuffer(const unsigned int* data, unsigned int count, unsigned int drawMode)
     : _count(count)
   {
-    glGenBuffers(1, &_id);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _id);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(*data), data, drawMode);
+    GL_CALL(glGenBuffers(1, &_id));
+    GL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _id));
+    GL_CALL(glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(*data), data, drawMode));
   }
 
   void IndexBuffer::Bind()
@@ -27,6 +29,6 @@ namespace Importal
 
   IndexBuffer::~IndexBuffer()
   {
-    glDeleteBuffers(1, &_id);
+    GL_CALL(glDeleteBuffers(1, &_id));
   }
 }
