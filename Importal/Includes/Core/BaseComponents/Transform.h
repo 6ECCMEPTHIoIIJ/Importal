@@ -13,13 +13,15 @@ namespace Importal::Core {
   {
   public:
 
-    Transform(Importal::Core::GameObject* parent, Transform* transform);
-    Transform(Importal::Core::GameObject* parent, glm::vec3 position);
+    Transform(Importal::Core::GameObject* gameObject, Transform* transform);
+    Transform(Importal::Core::GameObject* gameObject, glm::vec3 position);
+    Transform(Importal::Core::GameObject* gameObject, glm::vec3 position, glm::vec3 scale);
+    Transform(Importal::Core::GameObject* gameObject, glm::vec3 position, glm::vec3 scale, glm::vec3 rotation);
 
   private:
     glm::vec3 _position = glm::vec3(0, 0, 0);
-
-    double _xScale = 1, _yScale = 1, _zScale = 1;
+    glm::vec3 _scale = glm::vec3(1);
+    glm::vec3 _rotation = glm::vec3(0);
   };
 }
 
