@@ -15,7 +15,7 @@ namespace Importal::Core {
 
 #pragma region Callbacks
 
-    void Tick(double deltaTime);
+    virtual void Tick(double deltaTime);
 
 #pragma endregion
 

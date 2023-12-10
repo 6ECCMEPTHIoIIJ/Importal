@@ -31,3 +31,26 @@ Importal::Core::Transform::Transform(Importal::Core::GameObject* gameObject, glm
 {
   this->_rotation = rotation;
 }
+
+glm::vec3 Importal::Core::Transform::Position()
+{
+  return _position;
+}
+
+glm::vec3 Importal::Core::Transform::Scale()
+{
+  return _scale;
+}
+
+glm::vec3 Importal::Core::Transform::Rotation()
+{
+  return _rotation;
+}
+
+void Importal::Core::Transform::Move(glm::vec3 vector)
+{
+  _position += vector;
+}
+
+
+

@@ -18,6 +18,12 @@ namespace Importal::Core {
     Transform(Importal::Core::GameObject* gameObject, glm::vec3 position, glm::vec3 scale);
     Transform(Importal::Core::GameObject* gameObject, glm::vec3 position, glm::vec3 scale, glm::vec3 rotation);
 
+    glm::vec3 Position();
+    glm::vec3 Scale();
+    glm::vec3 Rotation();
+
+    void Move(glm::vec3 vector);
+
   private:
     glm::vec3 _position = glm::vec3(0, 0, 0);
     glm::vec3 _scale = glm::vec3(1);
