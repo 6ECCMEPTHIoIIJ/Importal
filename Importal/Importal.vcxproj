@@ -82,6 +82,7 @@
     </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Includes\Core\All.h" />
     <ClInclude Include="Includes\Core\BaseComponents\BehaviourComponent.h" />
     <ClInclude Include="Includes\Core\BaseComponents\Transform.h" />
     <ClInclude Include="Includes\Core\ComponentHasher.h" />

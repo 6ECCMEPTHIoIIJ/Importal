@@ -1,19 +1,18 @@
 #pragma once
 
-#include <Core/GameObject.h>
-#include "BaseComponents/Transform.h"
+#include "All.h"
+
+//#include "Core/GameObject.h"
 
 namespace Importal::Core {
   class GameComponent
   {
   public:
-    GameComponent(GameObject* parent);
-    
+    GameComponent(GameObject* gameObject);
 
-    ~GameComponent();
+    virtual ~GameComponent() = default;
 
-    Importal::Core::GameObject* GameObject();
-
+    GameObject* GameObject();
 
 #pragma region Removed ctors
 
@@ -25,7 +24,6 @@ namespace Importal::Core {
   private:
     Importal::Core::GameObject* _gameObject = nullptr;
 
-    Transform* _transform;
   };
 }
 

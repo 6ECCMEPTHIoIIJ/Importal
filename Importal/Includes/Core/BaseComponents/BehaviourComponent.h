@@ -1,6 +1,7 @@
 #pragma once
 
-class GameComponent;
+#include "../All.h"
+
 #include "Core/GameComponent.h"
 
 namespace Importal::Core {

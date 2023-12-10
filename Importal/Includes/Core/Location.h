@@ -1,5 +1,9 @@
 #pragma once
 
+#include  "All.h"
+
+#include "GameObject.h"
+
 namespace Importal::Core {
   class Location
   {
@@ -12,7 +16,7 @@ namespace Importal::Core {
     void RemoveGameObject(GameObject* object);
 
     void Tick(double deltaTime);
-    void Render()
+    void Render();
 
 #pragma region Removed ctors
 

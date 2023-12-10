@@ -1,21 +1,21 @@
 #pragma once
 
-#include <vector>
+#include "All.h"
 
-class GameComponent;
-#include "GameComponent.h"
+#include <vector>
 #include "ComponentHasher.h"
 #include "Location.h"
-
+#include "BaseComponents/Transform.h"
 
 namespace Importal::Core {
-  class GameObject final
+  class GameObject 
   {
   public:
 #pragma region Ctors
 
     GameObject(Location* location);
-    GameObject(Location* location, GameObject* parent);
+    GameObject(Location* location, Importal::Core::GameObject* parent);
+
     ~GameObject();
 
 #pragma endregion
@@ -24,6 +24,7 @@ namespace Importal::Core {
 
     GameObject* Parent();
     std::vector<GameObject*> Children();
+    Importal::Core::Transform* Transform();
 
     bool AddComponent(GameComponent* component);
 
@@ -35,7 +36,6 @@ namespace Importal::Core {
       requires std::is_base_of_v<GameComponent, T>
     T* GetCompoent();
 
-
 #pragma region Removed ctors
 
     GameObject(const GameObject&) = delete;
@@ -45,8 +45,11 @@ namespace Importal::Core {
 
   private:
     GameObject* _parent = nullptr;
+    Importal::Core::Transform* _transform;
     std::vector<GameObject*> _children = std::vector<GameObject*>();
-    static ComponentHasher _hasher;
+
+
+    //static ComponentHasher _hasher;
   };
 }
 
