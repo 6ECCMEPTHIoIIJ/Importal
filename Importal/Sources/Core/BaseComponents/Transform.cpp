@@ -9,7 +9,7 @@ Importal::Core::Transform::Transform(Importal::Core::GameObject* gameObject, Tra
     throw std::invalid_argument("Transfrom nullptr");
   }
 
-  this->_position = transform->_position;
+  this->_localPosition = transform->_localPosition;
   this->_scale = transform->_scale;
   this->_rotation = transform->_rotation;
 }
@@ -17,7 +17,7 @@ Importal::Core::Transform::Transform(Importal::Core::GameObject* gameObject, Tra
 Importal::Core::Transform::Transform(Importal::Core::GameObject* gameObject, glm::vec3 position)
   : GameComponent(gameObject)
 {
-  this->_position = position;
+  this->_localPosition = position;
 }
 
 Importal::Core::Transform::Transform(Importal::Core::GameObject* gameObject, glm::vec3 position, glm::vec3 scale)
@@ -34,7 +34,7 @@ Importal::Core::Transform::Transform(Importal::Core::GameObject* gameObject, glm
 
 glm::vec3 Importal::Core::Transform::Position()
 {
-  return _position;
+  return _localPosition;
 }
 
 glm::vec3 Importal::Core::Transform::Scale()
@@ -49,8 +49,23 @@ glm::vec3 Importal::Core::Transform::Rotation()
 
 void Importal::Core::Transform::Move(glm::vec3 vector)
 {
-  _position += vector;
+  _localPosition += vector;
 }
 
+glm::vec3 Importal::Core::Transform::LocalPosition()
+{
+  return _localPosition;
+}
 
+glm::vec3 Importal::Core::Transform::GlobalPosition()
+{
+  Importal::Core::GameObject* parent = GameObject()->Parent();
 
+  glm::vec3 globalPos = LocalPosition();
+  while (parent != nullptr) {
+    globalPos += parent->Transform()->LocalPosition();
+    parent = parent->Parent();
+  }
+
+  return globalPos;
+}

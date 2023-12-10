@@ -3,12 +3,14 @@
 #include "All.h"
 
 #include <vector>
+#include <unordered_map>
+
 #include "ComponentHasher.h"
 #include "Location.h"
 #include "BaseComponents/Transform.h"
 
 namespace Importal::Core {
-  class GameObject 
+  class GameObject final
   {
   public:
 #pragma region Ctors
@@ -48,8 +50,10 @@ namespace Importal::Core {
     Importal::Core::Transform* _transform;
     std::vector<GameObject*> _children = std::vector<GameObject*>();
 
+    std::unordered_map<ComponentHasher::Hash, BehaviourComponent*> _behaviourComponents;
+    std::unordered_map<ComponentHasher::Hash, GameComponent*> _components;
 
-    //static ComponentHasher _hasher;
+    static ComponentHasher _hasher;
   };
 }
 

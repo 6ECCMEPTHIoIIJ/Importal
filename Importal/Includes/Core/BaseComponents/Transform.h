@@ -6,13 +6,13 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "../GameObject.h"
 #include "../GameComponent.h"
 
 namespace Importal::Core {
   class Transform : public GameComponent
   {
   public:
-
     Transform(Importal::Core::GameObject* gameObject, Transform* transform);
     Transform(Importal::Core::GameObject* gameObject, glm::vec3 position);
     Transform(Importal::Core::GameObject* gameObject, glm::vec3 position, glm::vec3 scale);
@@ -24,8 +24,11 @@ namespace Importal::Core {
 
     void Move(glm::vec3 vector);
 
+    glm::vec3 LocalPosition();
+    glm::vec3 GlobalPosition();
+
   private:
-    glm::vec3 _position = glm::vec3(0, 0, 0);
+    glm::vec3 _localPosition = glm::vec3(0, 0, 0);
     glm::vec3 _scale = glm::vec3(1);
     glm::vec3 _rotation = glm::vec3(0);
   };
