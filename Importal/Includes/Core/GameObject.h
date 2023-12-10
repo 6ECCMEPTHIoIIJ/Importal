@@ -7,6 +7,8 @@
 
 #include "ComponentHasher.h"
 #include "Location.h"
+#include "GameComponent.h"
+#include "BaseComponents/BehaviourComponent.h"
 #include "BaseComponents/Transform.h"
 
 namespace Importal::Core {
@@ -15,8 +17,9 @@ namespace Importal::Core {
   public:
 #pragma region Ctors
 
-    GameObject(Location* location);
-    GameObject(Location* location, Importal::Core::GameObject* parent);
+    GameObject();
+    GameObject(GameObject* parent);
+    GameObject(GameObject* parent, Transform localPosition);
 
     ~GameObject();
 
@@ -28,15 +31,42 @@ namespace Importal::Core {
     std::vector<GameObject*> Children();
     Importal::Core::Transform* Transform();
 
-    bool AddComponent(GameComponent* component);
+    void Tick(double deltaTime);
 
     template<class T, class ...Args>
-      requires std::is_base_of_v<GameComponent, T>
-    T* AddComponent(Args... args);
+      requires std::is_base_of_v<BehaviourComponent, T>
+    bool AddComponent(T* component) {
+      if (_behaviourComponents.contains(_hasher.operator() < T > ())) {
+        return false;
+      }
+
+      _behaviourComponents[_hasher.operator() < T > ()] = component;
+
+      return true;
+    }
 
     template<class T, class ...Args>
-      requires std::is_base_of_v<GameComponent, T>
-    T* GetCompoent();
+      requires std::is_base_of_v<BehaviourComponent, T>
+    T* AddComponent(Args... args) {
+      if (_behaviourComponents.contains(_hasher.operator() < T > ())) {
+        return nullptr;
+      }
+
+      T* component = new T(args...);
+      _behaviourComponents[_hasher.operator() < T > ()] = component;
+
+      return component;
+    }
+
+    template<class T, class ...Args>
+      requires std::is_base_of_v<BehaviourComponent, T>
+    T* GetCompoent() {
+      if (_behaviourComponents.contains(_hasher.operator() < T > ())) {
+        return nullptr;
+      }
+
+      return dynamic_cast<T*>(_behaviourComponents[_hasher.operator() < T > ()]);
+    }
 
 #pragma region Removed ctors
 
@@ -54,6 +84,8 @@ namespace Importal::Core {
     std::unordered_map<ComponentHasher::Hash, GameComponent*> _components;
 
     static ComponentHasher _hasher;
+
+    void RemoveChildren(GameObject* children);
   };
 }
 

@@ -13,6 +13,8 @@ namespace Importal::Core {
     void Enable();
     void Disable();
 
+    virtual ~BehaviourComponent();
+
 #pragma region Callbacks
 
     virtual void Tick(double deltaTime);
