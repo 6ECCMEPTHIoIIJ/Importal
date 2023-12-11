@@ -25,7 +25,7 @@ namespace Importal
 				GLuint GetStride() const;
 
 		public:
-				void Push(GLuint count, GLuint type, GLubyte normalized = 0);
+				void Push(GLuint type, GLuint count, GLubyte normalized = 0);
 		private:
 				std::vector<VBElement> _elements;
 				GLuint _stride{ 0 };

@@ -10,6 +10,7 @@
 #include "Input/InputManager.h"
 #include "Camera.h"
 #include "GlExt.h"
+#include "Texture.h"
 
 namespace Importal
 {
@@ -65,15 +66,25 @@ namespace Importal
     shader.Use();
 
 
+    // GLfloat vertices[] = {
+    //   0.5f,  -0.5f,  0.5f, 1.0f, 0.0f, 1.0f, 
+    //   -0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 
+    //   -0.5f,  0.5f,  0.5f, 0.0f, 1.0f, 1.0f, 
+    //   0.5f,   0.5f,  0.5f, 0.0f, 0.0f, 1.0f, 
+    //   0.5f,  -0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 
+    //   -0.5f, -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 
+    //   -0.5f,  0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 
+    //   0.5f,   0.5f, -0.5f, 1.0f, 1.0f, 0.0f, 
+    // };
     GLfloat vertices[] = {
-      0.5f,  -0.5f,  0.5f, 1.0f, 0.0f, 1.0f,
-      -0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f,
-      -0.5f,  0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
-      0.5f,   0.5f,  0.5f, 0.0f, 0.0f, 1.0f,
-      0.5f,  -0.5f, -0.5f, 0.0f, 1.0f, 1.0f,
-      -0.5f, -0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
-      -0.5f,  0.5f, -0.5f, 1.0f, 0.0f, 0.0f,
-      0.5f,   0.5f, -0.5f, 1.0f, 1.0f, 0.0f,
+      0.5f,  -0.5f,  0.5f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+      -0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+      -0.5f,  0.5f,  0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+      0.5f,   0.5f,  0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
+      0.5f,  -0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+      -0.5f, -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f,
+      -0.5f,  0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+      0.5f,   0.5f, -0.5f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f,
     };
 
     GLuint indices[] = {
@@ -94,27 +105,29 @@ namespace Importal
     ArrayBuffer ab;
     ab.Bind();
     
-    VertexBuffer vb(vertices, 3 * 2 * 8 * sizeof(GLfloat), GL_STATIC_DRAW);
+    VertexBuffer vb(vertices, (3 + 3 + 2) * 8 * sizeof(GLfloat), GL_STATIC_DRAW);
     VertexBufferLayout vb_layout;
     vb_layout.Push(GL_FLOAT, 3);
     vb_layout.Push(GL_FLOAT, 3);
+    vb_layout.Push(GL_FLOAT, 2);
+    
     ab.AddBuffer(vb, vb_layout);
-
-   // GL_CALL(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0));
-   // GL_CALL(glEnableVertexAttribArray(0));
-
-   // VertexBuffer cb(colours, sizeof(colours) / 2, GL_STATIC_DRAW);
-   // GL_CALL(glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0));
-   // GL_CALL(glEnableVertexAttribArray(1));
-
     IndexBuffer ib(indices, sizeof(indices) / sizeof(*indices), GL_STATIC_DRAW);
 
+    Texture texture("Textures/vladik.jpg");
+    texture.Bind();
+    shader.SetInt(4, 0);
+    
     VertexBuffer::Unbind();
     ArrayBuffer::Unbind();
+    IndexBuffer::Unbind();
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
     glCullFace(GL_FRONT);
+
+    GL_CALL(glEnable(GL_BLEND));
+    GL_CALL(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
     while (!glfwWindowShouldClose(hWnd))
     {
       glfwPollEvents();

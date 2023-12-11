@@ -30,6 +30,7 @@
     <ClCompile Include="Sources\IndexBuffer.cpp" />
     <ClCompile Include="Sources\Input\Key.cpp" />
     <ClCompile Include="Sources\Input\KeyManager.cpp" />
+    <ClCompile Include="Sources\Texture.cpp" />
     <ClCompile Include="Sources\Timer.cpp" />
     <ClCompile Include="Sources\VertexBuffer.cpp" />
     <ClCompile Include="Sources\VertexBufferLayout.cpp" />
@@ -89,12 +90,16 @@
     <ClInclude Include="Includes\Input\KeyManager.h" />
     <ClInclude Include="Includes\Input\V2KeyActionManager.h" />
     <ClInclude Include="Includes\Shader.h" />
+    <ClInclude Include="Includes\Texture.h" />
     <ClInclude Include="Includes\Timer.h" />
     <ClInclude Include="Includes\Input\TriggerKeyActionManager.h" />
     <ClInclude Include="Includes\Input\V1KeyActionManager.h" />
     <ClInclude Include="Includes\VertexBuffer.h" />
     <ClInclude Include="Includes\VertexBufferLayout.h" />
     <ClInclude Include="Includes\Window.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Textures" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
