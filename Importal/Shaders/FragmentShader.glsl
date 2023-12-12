@@ -5,10 +5,15 @@ layout (location = 1) in vec2 v_textureCoords;
 
 layout (location = 0) out vec4 color;
 
-layout (location = 4) uniform sampler2D u_Texture;
+layout (location = 3) uniform sampler2D u_Texture;
+uniform sampler2D texture_diffuse1;
+uniform sampler2D texture_diffuse2;
+uniform sampler2D texture_diffuse3;
+uniform sampler2D texture_specular1;
+uniform sampler2D texture_specular2;
 
 void main()
 {
-	vec4 textureColor = texture2D(u_Texture, v_textureCoords);
+	vec4 textureColor = texture2D(texture_diffuse1, v_textureCoords);
 	color = textureColor;
 }

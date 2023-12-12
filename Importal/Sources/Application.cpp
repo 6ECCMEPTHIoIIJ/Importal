@@ -11,6 +11,7 @@
 #include "Camera.h"
 #include "GlExt.h"
 #include "Texture.h"
+#include "Object.h"
 
 namespace Importal
 {
@@ -64,18 +65,7 @@ namespace Importal
 
     auto shader = Shader("Shaders/VertexShader.glsl", "Shaders/FragmentShader.glsl");
     shader.Use();
-
-
-    // GLfloat vertices[] = {
-    //   0.5f,  -0.5f,  0.5f, 1.0f, 0.0f, 1.0f, 
-    //   -0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 
-    //   -0.5f,  0.5f,  0.5f, 0.0f, 1.0f, 1.0f, 
-    //   0.5f,   0.5f,  0.5f, 0.0f, 0.0f, 1.0f, 
-    //   0.5f,  -0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 
-    //   -0.5f, -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 
-    //   -0.5f,  0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 
-    //   0.5f,   0.5f, -0.5f, 1.0f, 1.0f, 0.0f, 
-    // };
+    
     GLfloat vertices[] = {
       0.5f,  -0.5f,  0.5f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
       -0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
@@ -114,13 +104,15 @@ namespace Importal
     ab.AddBuffer(vb, vb_layout);
     IndexBuffer ib(indices, sizeof(indices) / sizeof(*indices), GL_STATIC_DRAW);
 
-    Texture texture("Textures/vladik.jpg");
-    texture.Bind();
-    shader.SetInt(4, 0);
+    Texture texture("Textures/vladik.jpg", "dsd");
+    texture.Bind(0);
+    shader.SetInt(3, 0);
     
     VertexBuffer::Unbind();
     ArrayBuffer::Unbind();
     IndexBuffer::Unbind();
+
+    // Object cat("Objects/cat.obj");
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
@@ -142,28 +134,30 @@ namespace Importal
 
       glm::mat4 trans = glm::mat4(1.0f);
       glm::mat4 proj = glm::perspective(glm::radians(90.0f), (float)_window.GetW() / (float)_window.GetH(), 0.1f, 100.0f);
-
+      
       glm::mat4 view = Camera::GetView();
-
+      
       Shader::SetMat4(0, trans);
       Shader::SetMat4(1, view);
       Shader::SetMat4(2, proj);
-
-
+      
+      
       ab.Bind();
       glDrawElements(GL_TRIANGLES, ib.GetCount(), GL_UNSIGNED_INT, nullptr);
       ArrayBuffer::Unbind();
-
+      
       trans = glm::translate(trans, glm::vec3(0.5f, 0.5f, 0.5f));
       
       Shader::SetMat4(0, trans);
       Shader::SetMat4(1, view);
       Shader::SetMat4(2, proj);
-
-
+      
+      
       ab.Bind();
       glDrawElements(GL_TRIANGLES, ib.GetCount(), GL_UNSIGNED_INT, nullptr);
       ArrayBuffer::Unbind();
+
+      // cat.Draw(shader);
 
       glfwSwapBuffers(hWnd);
     }

@@ -68,6 +68,8 @@ namespace Importal
     static void SetMat3(int layout, const glm::mat3& mat);
     static void SetMat4(int layout, const glm::mat4& mat);
 
+    inline GLuint GetID() const;
+
   private:
     GLuint _program;
     static GLuint _curProgram;

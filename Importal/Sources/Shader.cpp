@@ -238,6 +238,11 @@ namespace Importal
     GL_CALL(glUniformMatrix4fv(layout, 1, GL_FALSE, glm::value_ptr(mat)));
   }
 
+  GLuint Shader::GetID() const
+  {
+    return _program;
+  }
+
   Shader::~Shader()
   {
     GL_CALL(glDeleteProgram(_program));
