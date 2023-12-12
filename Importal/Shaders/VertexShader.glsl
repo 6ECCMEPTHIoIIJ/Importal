@@ -10,12 +10,11 @@ layout (location = 0) uniform mat4 transform;
 layout (location = 1) uniform mat4 view;
 layout (location = 2) uniform mat4 projection;
 
-//layout (location = 0) out vec3 ourColor;
 layout (location = 1) out vec2 v_textureCoords;
 
-varying highp vec2 uv;
-varying highp mat3 tbnMatrix_viewSpace;
-varying highp vec4 fragmentPosition_viewSpace;
+out highp vec2 uv;
+out highp mat3 tbnMatrix_viewSpace;
+out highp vec4 fragmentPosition_viewSpace;
 
 void main()
 {

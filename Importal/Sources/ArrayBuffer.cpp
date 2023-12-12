@@ -33,7 +33,7 @@ namespace Importal
 
   ArrayBuffer::~ArrayBuffer()
   {
-    // GL_CALL(glDeleteVertexArrays(_count, &_id));
+    GL_CALL(glDeleteVertexArrays(_count, &_id));
   }
 
   void ArrayBuffer::Unbind()

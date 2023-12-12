@@ -1,8 +1,10 @@
 #version 460 core
 
-varying highp vec2 uv;
-varying highp mat3 tbnMatrix_viewSpace;
-varying highp vec4 fragmentPosition_viewSpace;
+in highp vec2 uv;
+in highp mat3 tbnMatrix_viewSpace;
+in highp vec4 fragmentPosition_viewSpace;
+
+out vec4 color;
 
 uniform sampler2D texture_diffuse1;
 uniform sampler2D texture_diffuse2;
@@ -17,7 +19,6 @@ void main() {
   highp vec4 diffuseColor = texture2D(texture_diffuse1, uv);
   highp vec3 specularColor = vec3(diffuseColor.rgb);
 
-
-  gl_FragColor.rgb = (diffuseColor.rgb) + (specularColor.rgb);
-  gl_FragColor.a = diffuseColor.a;
+  color.rgb = (diffuseColor.rgb) ;
+  color.a = diffuseColor.a;
 }

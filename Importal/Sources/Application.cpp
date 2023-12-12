@@ -54,6 +54,13 @@ namespace Importal
         glfwSetWindowShouldClose(_window.GetHWnd(), GL_TRUE);
     });
 
+    size_t index = 1;
+    InputManager::BindAction(GLFW_KEY_SPACE, [&index](const Key& key)
+    {
+      if (key.IsDown())
+        index++;
+    });
+
     InputManager::BindAction(GLFW_KEY_W, GLFW_KEY_A, GLFW_KEY_S, GLFW_KEY_D, [this](float xAxis, float yAxis)
     {
       Camera::MoveRelationly(glm::vec3(xAxis, -yAxis, 0.0f), _time.GetDeltaTime());
@@ -65,8 +72,10 @@ namespace Importal
     auto shader = Shader("Shaders/VertexShader.glsl", "Shaders/FragmentShader.glsl");
     shader.Use();
 
+    Object pigeon("Objects/pigeon/D0901B73.obj");
     Object cat("Objects/cat/cat.obj");
-    Object cat1("Objects/cat/cat.obj");
+    Object mecha("Objects/Mecha/QuadrupedTank.obj");
+
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
@@ -94,18 +103,27 @@ namespace Importal
       Shader::SetMat4(0, trans);
       Shader::SetMat4(1, view);
       Shader::SetMat4(2, proj);
-      cat.Draw(shader);
       
-      trans = glm::translate(trans, glm::vec3(0.5f, 0.5f, 0.5f));
 
+      for (int i = 0; i < index; ++i)
+      {
+        trans = glm::translate(trans, glm::vec3(glm::cos(i) / 1.2f, glm::sin(i) / 1.2f, -0.2f));
+        Shader::SetMat4(0, trans);
+        cat.Draw(shader);
+      }
+
+      trans = glm::translate(glm::scale(glm::mat4(1), glm::vec3(0.1, 0.1, 0.1)), glm::vec3(3, 0, 0));
+      Shader::SetMat4(0, trans); 
+      pigeon.Draw(shader);
+
+      trans = glm::translate(glm::scale(glm::mat4(1), glm::vec3(0.1, 0.1, 0.1)), glm::vec3(-3, 0, 0));
       Shader::SetMat4(0, trans);
-      Shader::SetMat4(1, view);
-      Shader::SetMat4(2, proj);
-
-      cat1.Draw(shader);
+      mecha.Draw(shader);
 
       glfwSwapBuffers(hWnd);
     }
+
+    std::cout << index << '\n';
   }
 
   Application::~Application()
