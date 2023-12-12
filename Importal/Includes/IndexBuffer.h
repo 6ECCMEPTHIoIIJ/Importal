@@ -9,6 +9,8 @@ namespace Importal
   {
   public:
     IndexBuffer(const unsigned int* data, unsigned int count, unsigned int drawMode);
+    // IndexBuffer(const IndexBuffer&) = delete;
+    // IndexBuffer(IndexBuffer&&) = delete;
     void Bind();
     unsigned int GetCount() const;
     ~IndexBuffer();

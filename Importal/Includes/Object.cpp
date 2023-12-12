@@ -22,8 +22,8 @@ namespace Importal
             }
             if(!skip)
             {   // if texture hasn't been loaded already, load it
-                Texture texture(str.C_Str(), typeName);
-                textures.push_back(texture);
+                Texture texture(directory + '/' + str.C_Str(), typeName);
+                textures.emplace_back(texture);
                 textures_loaded.push_back(texture);  // store it as texture loaded for entire model, to ensure we won't unnecessary load duplicate textures.
             }
         }
@@ -37,8 +37,8 @@ namespace Importal
 
     void Object::Draw(Shader& shader)
     {
-        for(unsigned int i = 0; i < meshes.size(); i++)
-            meshes[i].Draw(shader);
+        for (auto& mesh : meshes)
+            mesh.Draw(shader);
     }
 
     void Object::loadModel(std::string const& path)
@@ -67,7 +67,7 @@ namespace Importal
             // the node object only contains indices to index the actual objects in the scene. 
             // the scene contains all the data, node is just to keep stuff organized (like relations between nodes).
             aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-            meshes.push_back(processMesh(mesh, scene));
+            processMesh(mesh, scene);
         }
         // after we've processed all of the meshes (if any) we then recursively process each of the children nodes
         for(unsigned int i = 0; i < node->mNumChildren; i++)
@@ -77,7 +77,7 @@ namespace Importal
 
     }
 
-    Mesh Object::processMesh(aiMesh* mesh, const aiScene* scene)
+    void Object::processMesh(aiMesh* mesh, const aiScene* scene)
     {
         // data to fill
         std::vector<Vertex> vertices;
@@ -158,7 +158,7 @@ namespace Importal
         textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
         
         // return a mesh object created from the extracted mesh data
-        return Mesh(vertices, indices, textures);
+        meshes.emplace_back(vertices, indices, textures);
     }
     
 }

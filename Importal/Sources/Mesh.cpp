@@ -2,20 +2,24 @@
 
 namespace Importal
 {
-    Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned> indices, std::vector<Texture> textures)
+    Mesh::Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned>& indices, const std::vector<Texture>& textures)
+        : vertices(vertices), indices(indices), textures(textures),
+            vb([this, vertices](){ab.Bind(); return vertices.data(); }(), vertices.size() * sizeof(Vertex), GL_STATIC_DRAW),
+            ib([this, indices](){ab.Bind(); return indices.data();}(), indices.size(), GL_STATIC_DRAW)
     {
-        this->vertices = vertices;
-        this->indices = indices;
-        this->textures = textures;
-
-        // now that we have all the required data, set the vertex buffers and its attribute pointers.
         setupMesh();
+    }
+
+    Mesh::~Mesh()
+    {
+        for(auto& texture: textures)
+        {
+            texture.Delete();
+        }
     }
 
     void Mesh::Draw(Shader& shader)
     {
-        ab.Bind();
-        
         // bind appropriate textures
         unsigned int diffuseNr = 1;
         unsigned int specularNr = 1;
@@ -39,34 +43,30 @@ namespace Importal
             // and finally bind the texture
             textures[i].Bind(i);
         }
-        
+
         // draw mesh
-        
+
+        ab.Bind();
         glDrawElements(GL_TRIANGLES, static_cast<unsigned int>(indices.size()), GL_UNSIGNED_INT, nullptr);
         ArrayBuffer::Unbind();
         
         // always good practice to set everything back to defaults once configured.
-        // glActiveTexture(GL_TEXTURE0);
+        glActiveTexture(GL_TEXTURE0);
     }
 
     void Mesh::setupMesh()
     {
-        // create buffers/arrays
-        ab.Bind();
-        VertexBuffer vb(&vertices[0], vertices.size() * sizeof(Vertex), GL_STATIC_DRAW);
-        IndexBuffer ib(&indices[0], indices.size() * sizeof(unsigned int), GL_STATIC_DRAW);
-
         VertexBufferLayout layout;
         layout.Push(GL_FLOAT, 3);
         layout.Push(GL_FLOAT, 3);
         layout.Push(GL_FLOAT, 2);
         layout.Push(GL_FLOAT, 3);
         layout.Push(GL_FLOAT, 3);
-
         ab.AddBuffer(vb, layout);
 
-        VertexBuffer::Unbind();
+
         ArrayBuffer::Unbind();
+        VertexBuffer::Unbind();
         IndexBuffer::Unbind();
     }
 }

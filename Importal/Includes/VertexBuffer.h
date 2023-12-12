@@ -9,6 +9,8 @@ namespace Importal
   {
   public:
     VertexBuffer(const void* data, unsigned int size, unsigned int drawMode);
+    // VertexBuffer(const VertexBuffer&) = delete;
+    // VertexBuffer(VertexBuffer&&) = delete;
     void Bind();
     ~VertexBuffer();
 

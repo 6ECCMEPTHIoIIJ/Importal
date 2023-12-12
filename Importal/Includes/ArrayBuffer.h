@@ -11,6 +11,8 @@ namespace Importal
   {
   public:
     ArrayBuffer(unsigned int count = 1);
+    // ArrayBuffer(const ArrayBuffer&) = delete;
+    // ArrayBuffer(ArrayBuffer&&) = delete;
     void Bind();
     void AddBuffer(VertexBuffer& vb, const VertexBufferLayout& vb_layout);
     ~ArrayBuffer();

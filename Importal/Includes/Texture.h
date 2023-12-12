@@ -25,11 +25,11 @@ namespace Importal
             GLint MAG_FILTER = GL_LINEAR,
             GLint WRAP_S = GL_CLAMP_TO_EDGE,
             GLint WRAP_T = GL_CLAMP_TO_EDGE);
-    
-    ~Texture();
+  
   public:
     void Bind(GLuint slot = 0);
     static void Unbind();
+    void Delete();
 
     inline GLint GetWidth() const;
     inline GLint GetHeight() const;
