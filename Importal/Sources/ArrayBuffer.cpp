@@ -23,10 +23,11 @@ namespace Importal
       for (GLuint i = 0; i < elements.size(); i++)
       {
           const auto& element = elements[i];
-          GL_CALL(glEnableVertexAttribArray(i));
-          GL_CALL(glVertexAttribPointer(i, element.count, element.type, element.normalized, 
+          GL_CALL(glEnableVertexAttribArray(_currentAttribIndex));
+          GL_CALL(glVertexAttribPointer(_currentAttribIndex, element.count, element.type, element.normalized, 
               vb_layout.GetStride(), (const void*)(offset)));
           offset += element.count * VBElement::GetTypeSize(element.type);
+        ++_currentAttribIndex;
       }
   }
 

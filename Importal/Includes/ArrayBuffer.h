@@ -19,5 +19,6 @@ namespace Importal
   private:
     GLuint _id;
     unsigned int _count;
+    GLuint _currentAttribIndex = 0;
   };
 }

@@ -14,7 +14,7 @@ namespace Importal
     ~Texture();
   public:
     void Bind(GLuint slot = 0);
-    void Unbind();
+    static void Unbind();
 
     inline GLint GetWidth() const;
     inline GLint GetHeight() const;
