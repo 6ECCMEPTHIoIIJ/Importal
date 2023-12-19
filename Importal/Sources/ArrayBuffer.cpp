@@ -31,6 +31,22 @@ namespace Importal
       }
   }
 
+  void ArrayBuffer::AddBuffer(std::shared_ptr<VertexBuffer> vb, const VertexBufferLayout& vb_layout)
+  {
+    vb->Bind();
+    const auto& elements = vb_layout.GetElements();
+    GLuint offset = 0;
+    for (GLuint i = 0; i < elements.size(); i++)
+    {
+      const auto& element = elements[i];
+      GL_CALL(glEnableVertexAttribArray(_currentAttribIndex));
+      GL_CALL(glVertexAttribPointer(_currentAttribIndex, element.count, element.type, element.normalized, 
+          vb_layout.GetStride(), (const void*)(offset)));
+      offset += element.count * VBElement::GetTypeSize(element.type);
+      ++_currentAttribIndex;
+    }
+  }
+
   ArrayBuffer::~ArrayBuffer()
   {
     GL_CALL(glDeleteVertexArrays(_count, &_id));

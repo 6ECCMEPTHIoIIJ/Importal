@@ -3,14 +3,16 @@
 namespace Importal
 {
     Mesh::Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned>& indices, const std::vector<Texture>& textures)
-        : vertices(vertices), indices(indices), textures(textures),
-            vb([this, vertices](){ab.Bind(); return vertices.data(); }(), vertices.size() * sizeof(Vertex), GL_STATIC_DRAW),
-            ib([this, indices](){ab.Bind(); return indices.data();}(), indices.size(), GL_STATIC_DRAW)
+        : vertices(vertices), indices(indices), textures(textures)
     {
+        ab = std::make_shared<ArrayBuffer>();
+        ab->Bind();
+        vb = std::make_shared<VertexBuffer>(vertices.data(), vertices.size() * sizeof(Vertex), GL_STATIC_DRAW);
+        ib = std::make_shared<IndexBuffer>(indices.data(), indices.size(), GL_STATIC_DRAW);
         setupMesh();
     }
 
-    Mesh::~Mesh()
+    void Mesh::Delete()
     {
         for(auto& texture: textures)
         {
@@ -46,7 +48,7 @@ namespace Importal
 
         // draw mesh
 
-        ab.Bind();
+        ab->Bind();
         glDrawElements(GL_TRIANGLES, static_cast<unsigned int>(indices.size()), GL_UNSIGNED_INT, nullptr);
         ArrayBuffer::Unbind();
         
@@ -62,11 +64,11 @@ namespace Importal
         layout.Push(GL_FLOAT, 2);
         layout.Push(GL_FLOAT, 3);
         layout.Push(GL_FLOAT, 3);
-        ab.AddBuffer(vb, layout);
+        ab->AddBuffer(vb, layout);
 
 
-        ArrayBuffer::Unbind();
-        VertexBuffer::Unbind();
-        IndexBuffer::Unbind();
+        ab->Unbind();
+        vb->Unbind();
+        ib->Unbind();
     }
 }

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include "VertexBuffer.h"
@@ -15,6 +16,7 @@ namespace Importal
     // ArrayBuffer(ArrayBuffer&&) = delete;
     void Bind();
     void AddBuffer(VertexBuffer& vb, const VertexBufferLayout& vb_layout);
+    void AddBuffer(std::shared_ptr<VertexBuffer> vb, const VertexBufferLayout& vb_layout);
     ~ArrayBuffer();
 
     static void Unbind();

@@ -57,8 +57,8 @@ namespace Importal
     size_t index = 1;
     InputManager::BindAction(GLFW_KEY_SPACE, [&index](const Key& key)
     {
-      if (key.IsDown())
-        index++;
+      if (key.IsJustPressed())
+        index += 100;
     });
 
     InputManager::BindAction(GLFW_KEY_W, GLFW_KEY_A, GLFW_KEY_S, GLFW_KEY_D, [this](float xAxis, float yAxis)
@@ -75,7 +75,7 @@ namespace Importal
     Object pigeon("Objects/pigeon/D0901B73.obj");
     Object cat("Objects/cat/cat.obj");
     Object mecha("Objects/Mecha/QuadrupedTank.obj");
-
+    Object tractor("Objects/apple/apple.obj");
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
@@ -105,20 +105,29 @@ namespace Importal
       Shader::SetMat4(2, proj);
       
 
+      auto t = (float)glfwGetTime();
       for (int i = 0; i < index; ++i)
       {
         trans = glm::translate(trans, glm::vec3(glm::cos(i) / 1.2f, glm::sin(i) / 1.2f, -0.2f));
+        auto y = glm::angleAxis(t, glm::vec3(0.f, 1.0f, 0.f));
+        auto z = glm::angleAxis(t, glm::vec3(0.f, 0.f, 1.f));
+        trans = trans * glm::mat4_cast(y) * glm::mat4_cast(z);
         Shader::SetMat4(0, trans);
         cat.Draw(shader);
       }
-
+      
       trans = glm::translate(glm::scale(glm::mat4(1), glm::vec3(0.1, 0.1, 0.1)), glm::vec3(3, 0, 0));
       Shader::SetMat4(0, trans); 
       pigeon.Draw(shader);
-
+      
       trans = glm::translate(glm::scale(glm::mat4(1), glm::vec3(0.1, 0.1, 0.1)), glm::vec3(-3, 0, 0));
       Shader::SetMat4(0, trans);
       mecha.Draw(shader);
+
+      trans = glm::scale(glm::mat4(1), glm::vec3(.01, .01, .01));
+      // trans = glm::translate(trans, glm::vec3(-150, 0, 0));
+      Shader::SetMat4(0, trans);
+      tractor.Draw(shader);
 
       glfwSwapBuffers(hWnd);
     }

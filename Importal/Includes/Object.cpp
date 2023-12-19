@@ -41,6 +41,14 @@ namespace Importal
             mesh.Draw(shader);
     }
 
+    void Object::Delete()
+    {
+        for (auto mesh : meshes)
+        {
+            mesh.Delete();
+        }
+    }
+
     void Object::loadModel(std::string const& path)
     {
         // read file via ASSIMP

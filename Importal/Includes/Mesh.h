@@ -34,18 +34,19 @@ namespace Importal
 
         // constructor
         Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices, const std::vector<Texture>& textures);
-        ~Mesh();
         
         // render the mesh
         void Draw(Shader &shader);
+
+        void Delete();
 
     private:
         // initializes all the buffer objects/arrays
         void setupMesh();
 
-        ArrayBuffer ab;
-        VertexBuffer vb;
-        IndexBuffer ib;
+        std::shared_ptr<ArrayBuffer> ab;
+        std::shared_ptr<VertexBuffer> vb;
+        std::shared_ptr<IndexBuffer> ib;
     };
 };
 
