@@ -12,7 +12,8 @@
 
 namespace Importal
 {
-    struct Vertex {
+    struct Vertex
+    {
         // position
         glm::vec3 Position;
         // normal
@@ -25,20 +26,20 @@ namespace Importal
         glm::vec3 Bitangent;
     };
 
-    class Mesh {
+    class Mesh
+    {
     public:
         // mesh Data
-        std::vector<Vertex>       vertices;
+        std::vector<Vertex> vertices;
         std::vector<unsigned int> indices;
-        std::vector<Texture>      textures;
+        std::vector<std::shared_ptr<Texture>> textures;
 
         // constructor
-        Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices, const std::vector<Texture>& textures);
-        
-        // render the mesh
-        void Draw(Shader &shader);
+        Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices,
+             const std::vector<std::shared_ptr<Texture>>& textures);
 
-        void Delete();
+        // render the mesh
+        void Draw(Shader& shader);
 
     private:
         // initializes all the buffer objects/arrays
@@ -49,4 +50,3 @@ namespace Importal
         std::shared_ptr<IndexBuffer> ib;
     };
 };
-

@@ -75,7 +75,7 @@ namespace Importal
     Object pigeon("Objects/pigeon/D0901B73.obj");
     Object cat("Objects/cat/cat.obj");
     Object mecha("Objects/Mecha/QuadrupedTank.obj");
-    Object tractor("Objects/apple/apple.obj");
+    Object apple("Objects/apple/apple.obj");
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
@@ -127,7 +127,7 @@ namespace Importal
       trans = glm::scale(glm::mat4(1), glm::vec3(.01, .01, .01));
       // trans = glm::translate(trans, glm::vec3(-150, 0, 0));
       Shader::SetMat4(0, trans);
-      tractor.Draw(shader);
+      apple.Draw(shader);
 
       glfwSwapBuffers(hWnd);
     }

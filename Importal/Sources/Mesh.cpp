@@ -2,22 +2,20 @@
 
 namespace Importal
 {
-    Mesh::Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned>& indices, const std::vector<Texture>& textures)
+    Mesh::Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned>& indices, const std::vector<std::shared_ptr<Texture>>& textures)
         : vertices(vertices), indices(indices), textures(textures)
     {
+        // this->textures.reserve(textures.size());
+        // for (const auto& texture : textures)
+        // {
+        //     this->textures.emplace_back(new Texture(*texture));
+        // }
+        
         ab = std::make_shared<ArrayBuffer>();
         ab->Bind();
         vb = std::make_shared<VertexBuffer>(vertices.data(), vertices.size() * sizeof(Vertex), GL_STATIC_DRAW);
         ib = std::make_shared<IndexBuffer>(indices.data(), indices.size(), GL_STATIC_DRAW);
         setupMesh();
-    }
-
-    void Mesh::Delete()
-    {
-        for(auto& texture: textures)
-        {
-            texture.Delete();
-        }
     }
 
     void Mesh::Draw(Shader& shader)
@@ -30,7 +28,7 @@ namespace Importal
         for (int i = 0; i < textures.size(); i++)
         {
             std::string number;
-            std::string name = textures[i].GetType();
+            std::string name = textures[i]->GetType();
             if (name == "texture_diffuse")
                 number = std::to_string(diffuseNr++);
             else if (name == "texture_specular")
@@ -43,7 +41,7 @@ namespace Importal
             // now set the sampler to the correct texture unit
             shader.SetInt((name + number), i);
             // and finally bind the texture
-            textures[i].Bind(i);
+            textures[i]->Bind(i);
         }
 
         // draw mesh

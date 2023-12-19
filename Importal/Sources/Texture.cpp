@@ -57,7 +57,7 @@ namespace Importal
     GL_CALL(glBindTexture(GL_TEXTURE_2D, 0));
   }
 
-  void Texture::Delete()
+  Texture::~Texture()
   {
     GL_CALL(glDeleteTextures(1, &_data.id));
   }
