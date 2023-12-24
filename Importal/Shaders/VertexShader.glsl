@@ -12,23 +12,27 @@ layout (location = 2) uniform mat4 projection;
 
 layout (location = 1) out vec2 v_textureCoords;
 
-out highp vec2 uv;
-out highp mat3 tbnMatrix_viewSpace;
-out highp vec4 fragmentPosition_viewSpace;
+out vec2 uv;
+out mat3 tbnMatrix_viewSpace;
+out vec4 fragmentPosition_viewSpace;
+out vec4 fragmentPosition_worldSpace;
+out vec3 fragmentNormal;
 
 void main()
 {
-  highp vec4 vertexPosition_worldSpace = transform * vec4(position, 1.0f);
-  highp vec4 vertexPosition_viewSpace = view * vertexPosition_worldSpace;
+  vec4 vertexPosition_worldSpace = transform * vec4(position, 1.0f);
+  vec4 vertexPosition_viewSpace = view * vertexPosition_worldSpace;
   gl_Position = projection * vertexPosition_viewSpace;
 
   fragmentPosition_viewSpace = vertexPosition_viewSpace;
+  fragmentPosition_worldSpace = vertexPosition_worldSpace;
   uv = textureCoords;
+  fragmentNormal = normal;
 
-  highp mat3 modelViewMatrix_3x3 = mat3(view * transform);
-  highp vec3 vertexTangent = normalize(tangent);
-  highp vec3 vertexBiTangent = normalize(bitangent);
-  highp vec3 vertexNormal = normalize(normal);
+  mat3 modelViewMatrix_3x3 = mat3(view * transform);
+  vec3 vertexTangent = normalize(tangent);
+  vec3 vertexBiTangent = normalize(bitangent);
+  vec3 vertexNormal = normalize(normal);
 
   tbnMatrix_viewSpace = modelViewMatrix_3x3 * mat3(
     vertexTangent,

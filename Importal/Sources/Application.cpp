@@ -72,6 +72,8 @@ namespace Importal
     auto shader = Shader("Shaders/VertexShader.glsl", "Shaders/FragmentShader.glsl");
     shader.Use();
 
+    shader.SetVec3("lightPos", 10.f, 3.5f, 4.6f);
+    
     Object pigeon("Objects/pigeon/D0901B73.obj");
     Object cat("Objects/cat/cat.obj");
     Object mecha("Objects/Mecha/QuadrupedTank.obj");
@@ -104,14 +106,16 @@ namespace Importal
       Shader::SetMat4(1, view);
       Shader::SetMat4(2, proj);
       
+      
 
       auto t = (float)glfwGetTime();
       for (int i = 0; i < index; ++i)
       {
         trans = glm::translate(trans, glm::vec3(glm::cos(i) / 1.2f, glm::sin(i) / 1.2f, -0.2f));
-        auto y = glm::angleAxis(t, glm::vec3(0.f, 1.0f, 0.f));
-        auto z = glm::angleAxis(t, glm::vec3(0.f, 0.f, 1.f));
-        trans = trans * glm::mat4_cast(y) * glm::mat4_cast(z);
+        // auto y = glm::angleAxis(t, glm::vec3(0.f, 1.0f, 0.f));
+        // auto z = glm::angleAxis(t, glm::vec3(0.f, 0.f, 1.f));
+        // trans = trans * glm::mat4_cast(y) * glm::mat4_cast(z);
+        
         Shader::SetMat4(0, trans);
         cat.Draw(shader);
       }
@@ -126,6 +130,7 @@ namespace Importal
 
       trans = glm::scale(glm::mat4(1), glm::vec3(.01, .01, .01));
       // trans = glm::translate(trans, glm::vec3(-150, 0, 0));
+      
       Shader::SetMat4(0, trans);
       apple.Draw(shader);
 
