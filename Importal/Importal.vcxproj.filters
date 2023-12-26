@@ -72,6 +72,15 @@
     <ClCompile Include="Sources\Texture.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="Sources\Object.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\Mesh.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\Light.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Includes\Application.h">
@@ -125,6 +134,15 @@
     <ClInclude Include="Includes\Texture.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="Includes\Mesh.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Includes\Object.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Includes\Light.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="Shaders\VertexShader.glsl">
@@ -133,5 +151,7 @@
     <CopyFileToFolders Include="Shaders\FragmentShader.glsl">
       <Filter>Файлы ресурсов</Filter>
     </CopyFileToFolders>
+    <CopyFileToFolders Include="Shaders\DepthFragment.glsl" />
+    <CopyFileToFolders Include="Shaders\DepthVertex.glsl" />
   </ItemGroup>
 </Project>

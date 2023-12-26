@@ -6,6 +6,9 @@
 
 namespace Importal
 {
+  extern bool stopped;
+  extern bool move;
+
   class Camera
   {
   public:
@@ -17,6 +20,10 @@ namespace Importal
     static void MoveRelationly(const glm::vec3& movement, float deltaTime);
     static void OnMouseMove(float xPos, float yPos);
     static glm::mat4 GetView();
+    static glm::vec3 GetPos();
+    static glm::vec3 GetRotation();
+    static void TranslateRelationly(const glm::vec3& translate, float scale);
+    static void SetPos(const glm::vec3& pos);
 
   private:
     static glm::vec3 _pos;
@@ -24,5 +31,6 @@ namespace Importal
     static glm::vec3 _up;
     static float _sensitivity;
     static float _speed;
+    static glm::vec3 _rotation;
   };
 }

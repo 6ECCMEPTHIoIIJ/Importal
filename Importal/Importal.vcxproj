@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Includes\Object.cpp" />
+    <ClCompile Include="Sources\Object.cpp" />
     <ClCompile Include="Sources\Camera.cpp" />
     <ClCompile Include="Sources\GlExt.cpp" />
     <ClCompile Include="Sources\Input\InputManager.cpp" />
@@ -31,6 +31,7 @@
     <ClCompile Include="Sources\IndexBuffer.cpp" />
     <ClCompile Include="Sources\Input\Key.cpp" />
     <ClCompile Include="Sources\Input\KeyManager.cpp" />
+    <ClCompile Include="Sources\Light.cpp" />
     <ClCompile Include="Sources\Mesh.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -164,6 +165,7 @@
     <ClInclude Include="Includes\Input\Key.h" />
     <ClInclude Include="Includes\Input\KeyManager.h" />
     <ClInclude Include="Includes\Input\V2KeyActionManager.h" />
+    <ClInclude Include="Includes\Light.h" />
     <ClInclude Include="Includes\Mesh.h" />
     <ClInclude Include="Includes\Object.h" />
     <ClInclude Include="Includes\Shader.h" />
@@ -177,6 +179,14 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Textures" />
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="Shaders\DepthFragment.glsl">
+      <FileType>Document</FileType>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Shaders\DepthVertex.glsl">
+      <FileType>Document</FileType>
+    </CopyFileToFolders>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
