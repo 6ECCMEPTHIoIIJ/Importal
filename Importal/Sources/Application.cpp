@@ -134,14 +134,14 @@ namespace Importal
     auto light = Light(Light::Directional);
     light.setDiffuseColor(glm::vec4(1, 1, 1, 1));
     light.setAmbienceColor(glm::vec3(1, 1, 0));
-    light.setDirection(glm::vec4(glm::quarter_pi<float>(), glm::quarter_pi<float>(), 0, 0));
+    light.setDirection(glm::vec4(0, 0, 0, 0));
     //light.setCutoff(3.f / 180.f * glm::pi<float>());
     light.setPower(1.2);
 
     auto light2 = Light(Light::Directional);
     light2.setDiffuseColor(glm::vec4(1, 1, 0.5, 1));
     light2.setAmbienceColor(glm::vec3(0, 0, 1));
-    light2.setDirection(glm::vec4(glm::quarter_pi<float>(), -glm::quarter_pi<float>(), 0, 0));
+    light2.setDirection(glm::vec4(0, 0, 0, 0));
     //light.setCutoff(3.f / 180.f * glm::pi<float>());
     light.setPower(0.8);
 
