@@ -22,6 +22,9 @@ namespace Importal
     static glm::mat4 GetView();
     static glm::vec3 GetPos();
     static glm::vec3 GetRotation();
+    static glm::vec3 GetFront() {
+      return _front;
+    }
     static void TranslateRelationly(const glm::vec3& translate, float scale);
     static void SetPos(const glm::vec3& pos);
 

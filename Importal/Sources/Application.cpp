@@ -112,7 +112,7 @@ namespace Importal
     light.setPosition(glm::vec4(0, 20, 0, 1));
     light.setDiffuseColor(glm::vec4(1, 1, 1, 1));
     light.setAmbienceColor(glm::vec3(1, 0, 1));
-    light.setDirection(glm::vec4(glm::quarter_pi<float>(), glm::quarter_pi<float>(), 0, 1));
+    //light.setDirection(glm::vec4(glm::half_pi<float>(), glm::quarter_pi<float>(), 0, 0));
     light.setCutoff(3.f / 180.f * glm::pi<float>());
     light.setPower(1);
 
@@ -195,7 +195,7 @@ namespace Importal
         light1.setPower(0);
 
       light1.setPosition(glm::vec4(camPos, 1));
-      light1.setDirection(glm::vec4(glm::radians(camRot.x), glm::radians(camRot.z), glm::radians(camRot.y), 1));
+      light1.setDirection(glm::vec4(Camera::GetFront(), 0));
       
       glm::mat4 proj = glm::perspective(glm::radians(90.0f), (float)_window.GetW() / (float)_window.GetH(), 0.1f, 100.0f);
       glm::mat4 view = Camera::GetView();

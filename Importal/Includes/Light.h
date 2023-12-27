@@ -45,7 +45,6 @@ private:
   glm::vec4 m_direction;
   float m_cutoff;
   float m_power;
-  glm::vec3 _front;
 
   Type m_type;
   glm::mat4 m_lightMatrix;

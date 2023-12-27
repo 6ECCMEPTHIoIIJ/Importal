@@ -5,15 +5,15 @@ Light::Light(const Type& type) :
   m_specularColor(1.f, 1.f, 1.f),
   m_diffuseColor(1.f, 1.f, 1.f),
   m_position(0.f, 0.f, 0.f, 1.f),
-  m_direction(0.f, 0.f, 1.f, 0.f),
+  m_direction(0.f, 0.f, -1.f, 0.f),
   m_cutoff(glm::half_pi<float>()),
   m_power(1.0f),
   m_type(type)
 {
   m_lightMatrix = glm::identity<glm::mat4>();
   m_lightMatrix = glm::lookAt(glm::vec3(m_position),
-                       glm::vec3(m_position - m_direction),
-                       glm::vec3(0.0f, 1.0f, 0.0f));
+                       glm::vec3(m_position + m_direction),
+                       glm::vec3(m_direction.x, m_direction.z, -m_direction.y));
 }
 
 void Light::setAmbienceColor(const glm::vec3& ambienceColor)
@@ -51,28 +51,24 @@ void Light::setPosition(const glm::vec4& position)
   m_position = position;
   m_lightMatrix = glm::identity<glm::mat4>();
   m_lightMatrix = glm::lookAt(glm::vec3(m_position),
-                       glm::vec3(m_position) - _front,
-                       glm::vec3(0.0f, 1.0f, 0.0f));
+                       glm::vec3(m_position + m_direction),
+                       glm::vec3(m_direction.x, m_direction.z, -m_direction.y));
 }
 
 const glm::vec4& Light::getPosition() const
 {
   return m_position;
+
 }
 
 void Light::setDirection(const glm::vec4& direction)
 {
-  _front = glm::normalize(glm::vec3(cos(
-    glm::radians(direction.y)) * cos(glm::radians(direction.x)),
-    sin(glm::radians(direction.x)),
-    sin(glm::radians(direction.y)) * cos(glm::radians(direction.x))));
-
   m_direction = direction;
   m_direction = glm::normalize(m_direction);
   m_lightMatrix = glm::identity<glm::mat4>();
   m_lightMatrix = glm::lookAt(glm::vec3(m_position),
-                       glm::vec3(m_position) - _front,
-                       glm::vec3(0.0f, 1.0f, 0.0f));
+                       glm::vec3(m_position + m_direction),
+                       glm::vec3(m_direction.x, m_direction.z, -m_direction.y));
 }
 
 const glm::vec4& Light::getDirection() const
