@@ -11,7 +11,7 @@ glm::vec3 Importal::Camera::_pos = glm::vec3(0.0f, 0.0f, 0.0f);
 glm::vec3 Importal::Camera::_front = glm::vec3(0.0f, 0.0f, 1.0f);
 glm::vec3 Importal::Camera::_up = glm::vec3(0.0f, 1.0f, 0.0f);
 float Importal::Camera::_sensitivity = 0.1f;
-float Importal::Camera::_speed = 7.0f;
+float Importal::Camera::_speed = 15.0f;
 glm::vec3 Importal::Camera::_rotation = glm::vec3(0.0f, 90.0f, 0.0f);
 
 void Importal::Camera::Rotate(const glm::vec3& rotation)
@@ -31,6 +31,15 @@ void Importal::Camera::MoveRelationly(const glm::vec3& movement, float deltaTime
     rawMove = glm::normalize(rawMove);
 
   _pos += rawMove * _speed * deltaTime;
+  if (_pos.x < -5)
+    _pos.x = -5;
+  else if (_pos.x > 185)
+    _pos.x = 185;
+
+  if (_pos.z > 10)
+    _pos.z = 10;
+  else if (_pos.z < -230)
+    _pos.z = -230;
 }
 
 void Importal::Camera::TranslateRelationly(const glm::vec3& translate, float scale)
